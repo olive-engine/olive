@@ -1,4 +1,5 @@
-using System.Collections;
+﻿using System.Collections;
+using Microsoft.Xna.Framework;
 
 namespace Olive.Components;
 
@@ -14,7 +15,7 @@ public abstract class Behavior : Component
     /// <summary>
     ///     Called once per frame.
     /// </summary>
-    protected internal virtual void Update()
+    protected internal virtual void Update(GameTime gameTime)
     {
     }
 

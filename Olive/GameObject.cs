@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
@@ -249,7 +249,7 @@ public sealed class GameObject : IDisposable
     {
         foreach (Behavior behavior in _components.OfType<Behavior>())
         {
-            behavior.Update();
+            behavior.Update(gameTime);
         }
 
         for (var index = 0; index < _coroutines.Count; index++)
