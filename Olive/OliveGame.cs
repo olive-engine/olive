@@ -7,6 +7,7 @@ internal sealed class OliveGame : Game
 {
     private readonly Size _resolution;
     private readonly string _title;
+    private readonly DisplayMode _displayMode;
     private readonly GraphicsDeviceManager _graphics;
 
     /// <summary>
@@ -14,10 +15,12 @@ internal sealed class OliveGame : Game
     /// </summary>
     /// <param name="resolution">The game's screen resolution.</param>
     /// <param name="title">The window title.</param>
-    public OliveGame(Size resolution, string title)
+    /// <param name="displayMode">The game's display mode.</param>
+    public OliveGame(Size resolution, string title, DisplayMode displayMode)
     {
         _resolution = resolution;
         _title = title;
+        _displayMode = displayMode;
         _graphics = new GraphicsDeviceManager(this);
     }
 
@@ -25,6 +28,9 @@ internal sealed class OliveGame : Game
     {
         _graphics.PreferredBackBufferWidth = _resolution.Width;
         _graphics.PreferredBackBufferHeight = _resolution.Height;
+        _graphics.IsFullScreen = _displayMode is DisplayMode.Fullscreen or DisplayMode.FullscreenBorderless;
+        _graphics.HardwareModeSwitch = _displayMode is not DisplayMode.FullscreenBorderless;
+
         _graphics.ApplyChanges();
 
         Window.Title = _title;
@@ -34,7 +40,7 @@ internal sealed class OliveGame : Game
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        
+
         OliveEngine.SceneManager.Draw(gameTime);
     }
 

@@ -1,9 +1,9 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Olive;
 using Olive.Components;
 using Olive.SceneManagement;
 
-OliveEngine.Initialize("Hello, Olive!", 800, 600, false);
+OliveEngine.Initialize("Hello, Olive!", 800, 600, DisplayMode.Windowed);
 
 var sceneManager = new StackedSceneManager();
 OliveEngine.SceneManager = sceneManager;

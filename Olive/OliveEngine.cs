@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using Olive.SceneManagement;
 
 namespace Olive;
@@ -31,10 +31,10 @@ public static class OliveEngine
     /// <param name="title">The window title.</param>
     /// <param name="width">The resolution width.</param>
     /// <param name="height">The resolution height.</param>
-    /// <param name="isFullscreen"><see langword="true" /> to enable full screen rendering, otherwise <see langword="false" />.</param>
-    public static void Initialize(string title, int width, int height, bool isFullscreen)
+    /// <param name="displayMode">The game's display mode.</param>
+    public static void Initialize(string title, int width, int height, DisplayMode displayMode)
     {
-        Initialize(title, new Size(width, height), isFullscreen);
+        Initialize(title, new Size(width, height), displayMode);
     }
 
     /// <summary>
@@ -42,10 +42,10 @@ public static class OliveEngine
     /// </summary>
     /// <param name="title">The window title.</param>
     /// <param name="resolution">The screen resolution.</param>
-    /// <param name="isFullscreen"><see langword="true" /> to enable full screen rendering, otherwise <see langword="false" />.</param>
-    public static void Initialize(string title, Size resolution, bool isFullscreen)
+    /// <param name="displayMode">The game's display mode.</param>
+    public static void Initialize(string title, Size resolution, DisplayMode displayMode)
     {
-        CurrentGame = new OliveGame(resolution, title);
+        CurrentGame = new OliveGame(resolution, title, displayMode);
         s_sceneManager.Initialize();
         s_isInitialized = true;
     }
