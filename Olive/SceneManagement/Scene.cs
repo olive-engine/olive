@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Olive.Components;
 
 namespace Olive.SceneManagement;
@@ -33,7 +33,7 @@ public abstract class Scene
     {
         foreach (GameObject gameObject in _gameObjects)
         {
-            if (gameObject.TryGetComponent(out Camera? camera))
+            if (gameObject.ActiveInHierarchy && gameObject.TryGetComponent(out Camera? camera))
             {
                 OliveEngine.CurrentGame?.GraphicsDevice.Clear(camera.ClearColor);
                 break;
