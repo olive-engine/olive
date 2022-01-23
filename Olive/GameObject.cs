@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
@@ -113,7 +113,7 @@ public sealed class GameObject : IDisposable
         component.GameObject = this;
 
         _components.Add(component);
-        if (component is Behavior behavior) behavior.Awake();
+        if (component is Behavior behavior) behavior.Initialize();
         return component;
     }
 
@@ -165,7 +165,7 @@ public sealed class GameObject : IDisposable
         component.GameObject = this;
 
         _components.Add(component);
-        if (component is Behavior behavior) behavior.Awake();
+        if (component is Behavior behavior) behavior.Initialize();
 
         return component;
     }

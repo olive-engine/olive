@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 namespace Olive.Components;
 
@@ -7,14 +7,7 @@ public abstract class Behavior : Component
     /// <summary>
     ///     Called when the behavior has been awoken.
     /// </summary>
-    protected internal virtual void Awake()
-    {
-    }
-
-    /// <summary>
-    ///     Called before the first frame.
-    /// </summary>
-    protected internal virtual void Start()
+    protected internal virtual void Initialize()
     {
     }
 
