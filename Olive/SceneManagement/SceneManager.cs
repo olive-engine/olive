@@ -7,6 +7,18 @@ namespace Olive.SceneManagement;
 /// </summary>
 public abstract class SceneManager
 {
+    /// <summary>
+    ///     Loads the specified scene with the current scene manager's strategy.
+    /// </summary>
+    /// <param name="scene">The scene to load.</param>
+    public abstract void LoadScene(Scene scene);
+    
+    /// <summary>
+    ///     Unloads the specified scene with the current scene manager's strategy.
+    /// </summary>
+    /// <param name="scene">The scene to unload.</param>
+    public abstract void UnloadScene(Scene scene);
+    
     protected internal abstract void Draw(GameTime gameTime);
 
     protected internal abstract void Initialize();
