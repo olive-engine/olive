@@ -39,18 +39,9 @@ public sealed class GameObject : IDisposable
     {
         get
         {
-            Transform? parent = Transform.Parent;
-            if (parent is null) return ActiveSelf;
-
-            do
-            {
-                if (!parent.GameObject.ActiveSelf)
-                    return false;
-
-                parent = parent.Parent;
-            } while (parent != null);
-
-            return true;
+            if (Transform.Parent is { } parent)
+                return ActiveSelf && parent.GameObject.ActiveInHierarchy;
+            return ActiveSelf;
         }
     }
 
