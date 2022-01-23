@@ -17,7 +17,7 @@ public sealed class GameObject : IDisposable
     private bool _isDisposed = false;
     private Transform? _transform; // lazy load of Transform component
     private string _name;
-    private bool _activeSelf;
+    private bool _activeSelf = true;
 
     public GameObject(Scene owningScene)
     {
