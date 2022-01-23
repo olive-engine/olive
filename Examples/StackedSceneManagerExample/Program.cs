@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Olive;
 using Olive.Components;
 using Olive.SceneManagement;
@@ -12,6 +12,8 @@ var red = new RedScene();
 var blue = new BlueScene();
 
 sceneManager.Push(red);
+
+OliveEngine.Run();
 
 while (true)
 {

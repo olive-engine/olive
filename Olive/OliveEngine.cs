@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using Olive.SceneManagement;
 
 namespace Olive;
@@ -8,6 +8,7 @@ namespace Olive;
 /// </summary>
 public static class OliveEngine
 {
+    private static bool s_isInitialized;
     private static Thread? _gameThread;
     private static SceneManager s_sceneManager = new SimpleSceneManager();
 
@@ -45,10 +46,19 @@ public static class OliveEngine
     public static void Initialize(string title, Size resolution, bool isFullscreen)
     {
         CurrentGame = new OliveGame(resolution, title);
+        s_sceneManager.Initialize();
+        s_isInitialized = true;
+    }
+
+    /// <summary>
+    ///     Runs the game.
+    /// </summary>
+    public static void Run()
+    {
+        if (!s_isInitialized)
+            throw new InvalidOperationException("Cannot run game before engine is initialized.");
 
         _gameThread = new Thread(() => CurrentGame.Run());
         _gameThread.Start();
-
-        s_sceneManager.Initialize();
     }
 }
