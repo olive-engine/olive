@@ -14,4 +14,6 @@ public abstract class SceneManager
     public abstract Scene? PrimaryScene { get; protected internal set; }
 
     internal abstract void Draw(GameTime gameTime);
+
+    internal abstract void Update(GameTime gameTime);
 }

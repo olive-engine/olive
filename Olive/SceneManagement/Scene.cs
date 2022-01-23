@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Olive.Components;
 
 namespace Olive.SceneManagement;
@@ -38,6 +38,15 @@ public abstract class Scene
                 OliveEngine.CurrentGame?.GraphicsDevice.Clear(camera.ClearColor);
                 break;
             }
+        }
+    }
+
+    internal void Update(GameTime gameTime)
+    {
+        foreach (GameObject gameObject in _gameObjects)
+        {
+            if (!gameObject.ActiveInHierarchy) continue;
+            gameObject.Update(gameTime);
         }
     }
 }

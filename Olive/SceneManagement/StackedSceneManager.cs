@@ -47,4 +47,12 @@ public sealed class StackedSceneManager : SceneManager
             scene.Draw(gameTime);
         }
     }
+
+    internal override void Update(GameTime gameTime)
+    {
+        foreach (Scene scene in _scenes)
+        {
+            scene.Update(gameTime);
+        }
+    }
 }

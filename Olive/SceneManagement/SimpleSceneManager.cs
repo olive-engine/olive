@@ -14,4 +14,9 @@ public sealed class SimpleSceneManager : SceneManager
     {
         PrimaryScene?.Draw(gameTime);
     }
+
+    internal override void Update(GameTime gameTime)
+    {
+        PrimaryScene?.Update(gameTime);
+    }
 }

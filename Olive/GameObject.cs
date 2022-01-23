@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Xna.Framework;
 using Olive.Components;
 using Olive.SceneManagement;
 
@@ -10,6 +12,7 @@ namespace Olive;
 /// </summary>
 public sealed class GameObject : IDisposable
 {
+    private readonly List<Coroutine> _coroutines = new();
     private readonly List<Component> _components = new();
     private bool _isDisposed = false;
     private Transform? _transform; // lazy load of Transform component
@@ -237,6 +240,49 @@ public sealed class GameObject : IDisposable
             throw new InvalidOperationException("Cannot remove the Transform component from a game object.");
 
         _components.Remove(component);
+    }
+
+    internal Coroutine StartCoroutine(IEnumerator enumerator)
+    {
+        var coroutine = new Coroutine(enumerator);
+        _coroutines.Add(coroutine);
+        return coroutine;
+    }
+
+    internal void StopCoroutine(Coroutine coroutine)
+    {
+        _coroutines.Remove(coroutine);
+    }
+
+    internal void Update(GameTime gameTime)
+    {
+        foreach (Behavior behavior in _components.OfType<Behavior>())
+        {
+            behavior.Update();
+        }
+
+        for (var index = 0; index < _coroutines.Count; index++)
+        {
+            Coroutine coroutine = _coroutines[index];
+            Stack<IEnumerator> instructions = coroutine.CallStack;
+
+            if (instructions.Count == 0)
+            {
+                _coroutines.RemoveAt(index);
+                index--;
+                continue;
+            }
+
+            IEnumerator instruction = instructions.Peek();
+            if (!instruction.MoveNext())
+            {
+                instructions.Pop();
+                continue;
+            }
+
+            if (instruction.Current is IEnumerator next && instruction != next)
+                instructions.Push(next);
+        }
     }
 
     private void AssertNonDisposed()

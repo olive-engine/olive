@@ -35,6 +35,13 @@ internal sealed class OliveGame : Game
     {
         base.Draw(gameTime);
         
-        OliveEngine.SceneManager.PrimaryScene?.Draw(gameTime);
+        OliveEngine.SceneManager.Draw(gameTime);
+    }
+
+    protected override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+        OliveEngine.SceneManager.Update(gameTime);
     }
 }
