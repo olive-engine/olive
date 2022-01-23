@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Olive", "Olive\Olive.csproj", "{70CD9DFC-0DB0-4DB2-9BE7-3125EC018755}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{B87971E4-B6B1-477C-B328-6C1880FC36D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloOlive", "Examples\HelloOlive\HelloOlive.csproj", "{E75EE06B-52B1-42A6-8920-6A1259F18C39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackedSceneManagerExample", "Examples\StackedSceneManagerExample\StackedSceneManagerExample.csproj", "{344BB915-2E6D-41A0-8CE8-F922B4C60260}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70CD9DFC-0DB0-4DB2-9BE7-3125EC018755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70CD9DFC-0DB0-4DB2-9BE7-3125EC018755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70CD9DFC-0DB0-4DB2-9BE7-3125EC018755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70CD9DFC-0DB0-4DB2-9BE7-3125EC018755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E75EE06B-52B1-42A6-8920-6A1259F18C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E75EE06B-52B1-42A6-8920-6A1259F18C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E75EE06B-52B1-42A6-8920-6A1259F18C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E75EE06B-52B1-42A6-8920-6A1259F18C39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{344BB915-2E6D-41A0-8CE8-F922B4C60260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{344BB915-2E6D-41A0-8CE8-F922B4C60260}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{344BB915-2E6D-41A0-8CE8-F922B4C60260}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{344BB915-2E6D-41A0-8CE8-F922B4C60260}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E75EE06B-52B1-42A6-8920-6A1259F18C39} = {B87971E4-B6B1-477C-B328-6C1880FC36D7}
+		{344BB915-2E6D-41A0-8CE8-F922B4C60260} = {B87971E4-B6B1-477C-B328-6C1880FC36D7}
+	EndGlobalSection
+EndGlobal
