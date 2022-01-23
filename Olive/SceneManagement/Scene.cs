@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Olive.Components;
 
 namespace Olive.SceneManagement;
@@ -23,7 +23,19 @@ public abstract class Scene
     {
     }
 
-    internal void AddGameObject(GameObject gameObject)
+    /// <summary>
+    ///     Called once per frame.
+    /// </summary>
+    protected internal virtual void Update(GameTime gameTime)
+    {
+        foreach (GameObject gameObject in _gameObjects)
+        {
+            if (!gameObject.ActiveInHierarchy) continue;
+            gameObject.Update(gameTime);
+        }
+    }
+
+    internal virtual void AddGameObject(GameObject gameObject)
     {
         if (_gameObjects.Contains(gameObject)) return;
         _gameObjects.Add(gameObject);
@@ -38,15 +50,6 @@ public abstract class Scene
                 OliveEngine.CurrentGame?.GraphicsDevice.Clear(camera.ClearColor);
                 break;
             }
-        }
-    }
-
-    internal void Update(GameTime gameTime)
-    {
-        foreach (GameObject gameObject in _gameObjects)
-        {
-            if (!gameObject.ActiveInHierarchy) continue;
-            gameObject.Update(gameTime);
         }
     }
 }

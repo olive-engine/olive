@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace Olive.SceneManagement;
 
@@ -18,7 +18,7 @@ public abstract class SceneManager
     /// </summary>
     /// <param name="scene">The scene to unload.</param>
     public abstract void UnloadScene(Scene scene);
-    
+
     protected internal abstract void Draw(GameTime gameTime);
 
     protected internal abstract void Initialize();
