@@ -8,15 +8,20 @@ public sealed class SimpleSceneManager : SceneManager
     ///     Gets the currently active scene.
     /// </summary>
     /// <value>The currently active scene.</value>
-    public override Scene PrimaryScene { get; protected internal set; } = new EmptyScene();
+    public Scene CurrentScene { get; protected internal set; } = new EmptyScene();
 
-    internal override void Draw(GameTime gameTime)
+    protected internal override void Draw(GameTime gameTime)
     {
-        PrimaryScene?.Draw(gameTime);
+        CurrentScene?.Draw(gameTime);
     }
 
-    internal override void Update(GameTime gameTime)
+    protected internal override void Initialize()
     {
-        PrimaryScene?.Update(gameTime);
+        CurrentScene?.Initialize();
+    }
+
+    protected internal override void Update(GameTime gameTime)
+    {
+        CurrentScene?.Update(gameTime);
     }
 }

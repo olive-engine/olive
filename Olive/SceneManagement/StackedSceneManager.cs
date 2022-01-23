@@ -10,17 +10,6 @@ public sealed class StackedSceneManager : SceneManager
     private readonly Stack<Scene> _scenes = new(new[] {new EmptyScene()});
 
     /// <summary>
-    ///     Gets the topmost scene of the stack.
-    /// </summary>
-    /// <value>The topmost scene.</value>
-    public override Scene? PrimaryScene
-    {
-        get => _scenes.Count == 0 ? null : _scenes.Peek();
-        protected internal set =>
-            throw new InvalidOperationException($"Cannot set primary scene. Maybe you meant to use the {nameof(Push)} method?");
-    }
-
-    /// <summary>
     ///     Pushes a new scene onto the stack.
     /// </summary>
     /// <returns>The popped scene, or <see langword="null" /> if there are no more loaded scenes.</returns>
@@ -40,7 +29,7 @@ public sealed class StackedSceneManager : SceneManager
         _scenes.Push(scene);
     }
 
-    internal override void Draw(GameTime gameTime)
+    protected internal override void Draw(GameTime gameTime)
     {
         foreach (Scene scene in _scenes)
         {
@@ -48,7 +37,15 @@ public sealed class StackedSceneManager : SceneManager
         }
     }
 
-    internal override void Update(GameTime gameTime)
+    protected internal override void Initialize()
+    {
+        foreach (Scene scene in _scenes)
+        {
+            scene.Initialize();
+        }
+    }
+
+    protected internal override void Update(GameTime gameTime)
     {
         foreach (Scene scene in _scenes)
         {

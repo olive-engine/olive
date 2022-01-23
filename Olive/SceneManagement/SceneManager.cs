@@ -7,13 +7,9 @@ namespace Olive.SceneManagement;
 /// </summary>
 public abstract class SceneManager
 {
-    /// <summary>
-    ///     Gets the primary scene.
-    /// </summary>
-    /// <value>The primary scene.</value>
-    public abstract Scene? PrimaryScene { get; protected internal set; }
+    protected internal abstract void Draw(GameTime gameTime);
 
-    internal abstract void Draw(GameTime gameTime);
+    protected internal abstract void Initialize();
 
-    internal abstract void Update(GameTime gameTime);
+    protected internal abstract void Update(GameTime gameTime);
 }

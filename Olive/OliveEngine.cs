@@ -49,6 +49,6 @@ public static class OliveEngine
         _gameThread = new Thread(() => CurrentGame.Run());
         _gameThread.Start();
 
-        s_sceneManager.PrimaryScene?.Initialize();
+        s_sceneManager.Initialize();
     }
 }
