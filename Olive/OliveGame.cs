@@ -8,7 +8,6 @@ internal sealed class OliveGame : Game
     private readonly Size _resolution;
     private readonly string _title;
     private readonly DisplayMode _displayMode;
-    private readonly GraphicsDeviceManager _graphics;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="OliveGame" /> class.
@@ -21,17 +20,19 @@ internal sealed class OliveGame : Game
         _resolution = resolution;
         _title = title;
         _displayMode = displayMode;
-        _graphics = new GraphicsDeviceManager(this);
+        GraphicsDeviceManager = new GraphicsDeviceManager(this);
     }
+
+    internal GraphicsDeviceManager GraphicsDeviceManager { get; }
 
     protected override void Initialize()
     {
-        _graphics.PreferredBackBufferWidth = _resolution.Width;
-        _graphics.PreferredBackBufferHeight = _resolution.Height;
-        _graphics.IsFullScreen = _displayMode is DisplayMode.Fullscreen or DisplayMode.FullscreenBorderless;
-        _graphics.HardwareModeSwitch = _displayMode is not DisplayMode.FullscreenBorderless;
+        GraphicsDeviceManager.PreferredBackBufferWidth = _resolution.Width;
+        GraphicsDeviceManager.PreferredBackBufferHeight = _resolution.Height;
+        GraphicsDeviceManager.IsFullScreen = _displayMode is DisplayMode.Fullscreen or DisplayMode.FullscreenBorderless;
+        GraphicsDeviceManager.HardwareModeSwitch = _displayMode is not DisplayMode.FullscreenBorderless;
 
-        _graphics.ApplyChanges();
+        GraphicsDeviceManager.ApplyChanges();
 
         Window.Title = _title;
         base.Initialize();
