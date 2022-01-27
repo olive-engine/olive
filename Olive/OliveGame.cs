@@ -34,6 +34,10 @@ internal sealed class OliveGame : Game
 
         GraphicsDeviceManager.ApplyChanges();
 
+        var state = new DepthStencilState();
+        state.DepthBufferEnable = true;
+        GraphicsDevice.DepthStencilState = state;
+
         Window.Title = _title;
         base.Initialize();
 
