@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Olive.SceneManagement;
 
@@ -11,8 +11,11 @@ public abstract class SceneManager
     ///     Loads the specified scene with the current scene manager's strategy.
     /// </summary>
     /// <param name="scene">The scene to load.</param>
-    public abstract void LoadScene(Scene scene);
-    
+    public virtual void LoadScene(Scene scene)
+    {
+        scene.SceneManager = this;
+    }
+
     /// <summary>
     ///     Unloads the specified scene with the current scene manager's strategy.
     /// </summary>

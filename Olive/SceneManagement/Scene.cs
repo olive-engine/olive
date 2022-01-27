@@ -17,6 +17,12 @@ public abstract class Scene
     public IReadOnlyCollection<GameObject> GameObjects => _gameObjects.AsReadOnly();
 
     /// <summary>
+    ///     Gets the current scene manager.
+    /// </summary>
+    /// <value>The scene manager.</value>
+    public SceneManager SceneManager { get; internal set; } = null!;
+
+    /// <summary>
     ///     Called when the scene is being initialized.
     /// </summary>
     protected internal virtual void Initialize()
