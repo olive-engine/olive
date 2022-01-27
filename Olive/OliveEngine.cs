@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Olive.Components;
 using Olive.SceneManagement;
 
 namespace Olive;
@@ -8,6 +9,7 @@ namespace Olive;
 /// </summary>
 public static class OliveEngine
 {
+    private static readonly List<Component> _liveComponents = new();
     private static bool s_isInitialized;
     private static Thread? _gameThread;
     private static SceneManager s_sceneManager = new SimpleSceneManager();
@@ -60,5 +62,23 @@ public static class OliveEngine
 
         _gameThread = new Thread(() => CurrentGame.Run());
         _gameThread.Start();
+    }
+
+    internal static void AssertNonDisposed<T>(T instance) where T : Component
+    {
+        if (!_liveComponents.Contains(instance))
+            throw new ObjectDisposedException(instance.GetType().Name);
+    }
+
+    internal static void CreateComponent<T>(T instance) where T : Component
+    {
+        if (!_liveComponents.Contains(instance))
+            _liveComponents.Add(instance);
+    }
+
+    internal static void DisposeComponent<T>(T instance) where T : Component
+    {
+        if (!_liveComponents.Contains(instance)) return;
+        _liveComponents.Remove(instance);
     }
 }
