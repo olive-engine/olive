@@ -1,9 +1,9 @@
-﻿namespace Olive.Components;
+namespace Olive.Components;
 
 /// <summary>
-///     Represents a component which provides a game object with transform data.
+///     Represents a component which is attached to all gameobjects by default, providing them with transform data.
 /// </summary>
-public abstract class Transform : Component
+public class Transform : Component
 {
     private Transform? _parent;
 
