@@ -1,8 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
-using Olive.Components;
 using Olive.SceneManagement;
 
 namespace Olive;
