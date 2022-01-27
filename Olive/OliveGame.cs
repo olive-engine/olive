@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using Microsoft.Xna.Framework;
 
 namespace Olive;
@@ -35,6 +35,14 @@ internal sealed class OliveGame : Game
 
         Window.Title = _title;
         base.Initialize();
+
+    }
+
+    protected override void LoadContent()
+    {
+        base.LoadContent();
+
+        OliveEngine.SceneManager.LoadContent();
     }
 
     protected override void Draw(GameTime gameTime)

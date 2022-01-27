@@ -35,6 +35,10 @@ public abstract class Scene
         }
     }
 
+    protected internal virtual void LoadContent()
+    {
+    }
+
     internal virtual void AddGameObject(GameObject gameObject)
     {
         if (_gameObjects.Contains(gameObject)) return;

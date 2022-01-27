@@ -23,5 +23,7 @@ public abstract class SceneManager
 
     protected internal abstract void Initialize();
 
+    internal abstract void LoadContent();
+
     protected internal abstract void Update(GameTime gameTime);
 }

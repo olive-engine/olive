@@ -49,4 +49,9 @@ public sealed class SimpleSceneManager : SceneManager
     {
         CurrentScene?.Update(gameTime);
     }
+
+    internal override void LoadContent()
+    {
+        CurrentScene?.LoadContent();
+    }
 }
