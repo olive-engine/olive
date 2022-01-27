@@ -1,19 +1,46 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Olive.Components;
 
-namespace Olive.Components;
+namespace Olive;
 
 /// <summary>
-///     Represents a component which can be attached to game objects.
+///     Represents the base class for all components that can be attached to a game object.
 /// </summary>
-public abstract class Component : IDisposable
+public abstract class Component : ICloneable, IDisposable
 {
-    private bool _isDisposed = false;
+    private GameObject _gameObject = null!;
+
+    protected Component()
+    {
+        OliveEngine.CreateComponent(this);
+    }
 
     /// <summary>
     ///     Gets the game object to which this component is attached.
     /// </summary>
-    /// <value>The object to which this component is attached.</value>
-    public GameObject GameObject { get; internal set; } = null!;
+    /// <value>The game object to which this component is attached.</value>
+    public GameObject GameObject
+    {
+        get
+        {
+            OliveEngine.AssertNonDisposed(this);
+            return _gameObject;
+        }
+        internal set => _gameObject = value;
+    }
+
+    /// <summary>
+    ///     Gets the transform component attached to this game object.
+    /// </summary>
+    /// <value>The transform component.</value>
+    public Transform Transform
+    {
+        get
+        {
+            OliveEngine.AssertNonDisposed(this);
+            return GameObject.Transform;
+        }
+    }
 
     /// <summary>
     ///     Adds the specified component type to the game object.
@@ -22,6 +49,7 @@ public abstract class Component : IDisposable
     /// <returns>The newly-added component.</returns>
     public T AddComponent<T>(Func<T> componentFactory) where T : Component
     {
+        OliveEngine.AssertNonDisposed(this);
         return GameObject.AddComponent(componentFactory);
     }
 
@@ -32,6 +60,7 @@ public abstract class Component : IDisposable
     /// <returns>The newly-added component.</returns>
     public T AddComponent<T>() where T : Component, new()
     {
+        OliveEngine.AssertNonDisposed(this);
         return GameObject.AddComponent<T>();
     }
 
@@ -42,18 +71,18 @@ public abstract class Component : IDisposable
     /// <returns>The newly-added component.</returns>
     public Component AddComponent(Type componentType)
     {
+        OliveEngine.AssertNonDisposed(this);
         return GameObject.AddComponent(componentType);
     }
 
     /// <summary>
-    ///     Disposes all resources allocated by this component, and removes it from the owning object. 
+    ///     Disposes all resources allocated by this game object, and removes the object from the scene. 
     /// </summary>
     public void Dispose()
     {
-        if (_isDisposed) throw new ObjectDisposedException(GetType().Name);
-
+        OliveEngine.AssertNonDisposed(this);
         GameObject.RemoveComponent(this);
-        _isDisposed = true;
+        OliveEngine.DisposeComponent(this);
     }
 
     /// <summary>
@@ -63,6 +92,7 @@ public abstract class Component : IDisposable
     /// <returns>The component whose type matches <typeparamref name="T" />, or <see langword="null" /> if no match was found.</returns>
     public T? GetComponent<T>()
     {
+        OliveEngine.AssertNonDisposed(this);
         return GameObject.GetComponent<T>();
     }
 
@@ -73,6 +103,7 @@ public abstract class Component : IDisposable
     /// <returns>The components whose type matches <typeparamref name="T" />.</returns>
     public T[] GetComponents<T>()
     {
+        OliveEngine.AssertNonDisposed(this);
         return GameObject.GetComponents<T>();
     }
 
@@ -84,12 +115,13 @@ public abstract class Component : IDisposable
     /// <returns><see langword="true" /> if the component was found, otherwise <see langword="false" />.</returns>
     public bool TryGetComponent<T>([NotNullWhen(true)] out T? component)
     {
+        OliveEngine.AssertNonDisposed(this);
         return GameObject.TryGetComponent(out component);
     }
 
-    private protected void AssertNonDisposed()
+    public virtual object Clone()
     {
-        if (_isDisposed)
-            throw new ObjectDisposedException(GetType().Name);
+        OliveEngine.AssertNonDisposed(this);
+        return Activator.CreateInstance(GetType())!;
     }
 }
