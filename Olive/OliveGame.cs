@@ -36,6 +36,7 @@ internal sealed class OliveGame : Game
         Window.Title = _title;
         base.Initialize();
 
+        OliveEngine.SceneManager.Initialize();
     }
 
     protected override void LoadContent()
