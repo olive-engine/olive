@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Microsoft.Xna.Framework;
 
-namespace Olive.Components;
+namespace Olive;
 
 public abstract class Behavior : Component
 {
@@ -26,6 +26,7 @@ public abstract class Behavior : Component
     /// <returns>The new coroutine instance.</returns>
     protected Coroutine StartCoroutine(IEnumerator enumerator)
     {
+        OliveEngine.AssertNonDisposed(this);
         return GameObject.StartCoroutine(enumerator);
     }
 
@@ -35,6 +36,7 @@ public abstract class Behavior : Component
     /// <param name="coroutine">The coroutine to stop.</param>
     protected void StopCoroutine(Coroutine coroutine)
     {
+        OliveEngine.AssertNonDisposed(this);
         GameObject.StopCoroutine(coroutine);
     }
 }
