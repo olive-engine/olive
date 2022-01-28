@@ -160,7 +160,7 @@ public sealed class GameObject : IDisposable
     /// <exception cref="ArgumentException">
     ///     <para><paramref name="type" /> does is abstract.</para>
     ///     -or-
-    ///     <para><paramref name="type" /> does not inherit <see cref="component" />.</para>
+    ///     <para><paramref name="type" /> does not inherit <see cref="Component" />.</para>
     /// </exception>
     public Component AddComponent(Type type)
     {
