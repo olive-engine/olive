@@ -20,7 +20,10 @@ public sealed class GameObject : IDisposable
 
     public GameObject(Scene owningScene)
     {
-        if (owningScene is null) throw new ArgumentNullException(nameof(owningScene));
+        if (owningScene is null)
+        {
+            throw new ArgumentNullException(nameof(owningScene));
+        }
 
         owningScene.AddGameObject(this);
         AddComponent<Transform3D>();
@@ -39,7 +42,10 @@ public sealed class GameObject : IDisposable
         get
         {
             if (Transform.Parent is { } parent)
+            {
                 return ActiveSelf && parent.GameObject.ActiveInHierarchy;
+            }
+
             return ActiveSelf;
         }
     }
@@ -227,7 +233,9 @@ public sealed class GameObject : IDisposable
     internal void RemoveComponent<T>(T component, bool force = false) where T : Component
     {
         if (component is Transform && !force)
+        {
             throw new InvalidOperationException("Cannot remove the Transform component from a game object.");
+        }
 
         _components.Remove(component);
     }
@@ -271,13 +279,17 @@ public sealed class GameObject : IDisposable
             }
 
             if (instruction.Current is IEnumerator next && instruction != next)
+            {
                 instructions.Push(next);
+            }
         }
     }
 
     private void AssertNonDisposed()
     {
         if (_isDisposed)
+        {
             throw new ObjectDisposedException(Name);
+        }
     }
 }

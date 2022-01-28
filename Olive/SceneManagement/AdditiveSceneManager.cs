@@ -12,8 +12,10 @@ public sealed class AdditiveSceneManager : SceneManager
     public override void LoadScene(Scene scene)
     {
         if (_scenes.Contains(scene))
+        {
             throw new InvalidOperationException("Scene is already loaded.");
-        
+        }
+
         _scenes.Add(scene);
         scene.Initialize();
     }
@@ -21,7 +23,9 @@ public sealed class AdditiveSceneManager : SceneManager
     public override void UnloadScene(Scene scene)
     {
         if (!_scenes.Contains(scene))
+        {
             throw new InvalidOperationException("Specified scene is not loaded by this manager.");
+        }
 
         _scenes.Remove(scene);
     }

@@ -50,7 +50,9 @@ public abstract class Scene
     public T LoadContent<T>(string assetName)
     {
         if (OliveEngine.CurrentGame != null)
+        {
             return OliveEngine.CurrentGame.Content.Load<T>(assetName);
+        }
 
         Trace.Assert(false);
         return default!;
