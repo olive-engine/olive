@@ -16,7 +16,10 @@ public sealed class SimpleSceneManager : SceneManager
             throw new InvalidOperationException("Scene is already loaded.");
 
         CurrentScene = scene;
-        scene.Initialize();
+        if (!scene.IsInitialized)
+        {
+            scene.Initialize();
+        }
     }
 
     /// <summary>
@@ -35,18 +38,22 @@ public sealed class SimpleSceneManager : SceneManager
         CurrentScene = new EmptyScene();
     }
 
+    protected internal override void Initialize()
+    {
+        base.Initialize();
+
+        if (!(CurrentScene?.IsInitialized ?? false))
+        {
+            CurrentScene?.Initialize();
+        }
+    }
+
     protected internal override void Draw(GameTime gameTime)
     {
         if (!(CurrentScene?.Draw(gameTime) ?? false) && OliveEngine.CurrentGame?.GraphicsDevice is { } graphicsDevice)
         {
             graphicsDevice.Clear(Color.Black);
         }
-    }
-
-    protected internal override void Initialize()
-    {
-        base.Initialize();
-        CurrentScene?.Initialize();
     }
 
     protected internal override void OnPostRender()

@@ -55,7 +55,10 @@ public sealed class AdditiveSceneManager : SceneManager
 
         foreach (Scene scene in _scenes.ToArray())
         {
-            scene.Initialize();
+            if (!scene.IsInitialized)
+            {
+                scene.Initialize();
+            }
         }
     }
 

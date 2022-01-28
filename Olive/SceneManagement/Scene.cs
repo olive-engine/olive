@@ -43,12 +43,15 @@ public abstract class Scene
     /// </summary>
     /// <value>The scene manager.</value>
     public SceneManager SceneManager { get; internal set; } = null!;
+    
+    internal bool IsInitialized { get; private set; }
 
     /// <summary>
     ///     Called when the scene is being initialized.
     /// </summary>
     protected internal virtual void Initialize()
     {
+        IsInitialized = true;
     }
 
     /// <summary>
