@@ -8,10 +8,35 @@ namespace Olive.SceneManagement;
 public abstract class SceneManager
 {
     /// <summary>
-    ///     Gets the primary scene.
+    ///     Loads the specified scene with the current scene manager's strategy.
     /// </summary>
-    /// <value>The primary scene.</value>
-    public abstract Scene? PrimaryScene { get; protected internal set; }
+    /// <param name="scene">The scene to load.</param>
+    public virtual void LoadScene(Scene scene)
+    {
+        scene.SceneManager = this;
+    }
 
-    internal abstract void Draw(GameTime gameTime);
+    /// <summary>
+    ///     Unloads the specified scene with the current scene manager's strategy.
+    /// </summary>
+    /// <param name="scene">The scene to unload.</param>
+    public abstract void UnloadScene(Scene scene);
+
+    protected internal abstract void Draw(GameTime gameTime);
+
+    protected internal virtual void Initialize()
+    {
+        if (OliveEngine.CurrentGame is not null)
+        {
+            GL.Initialize(OliveEngine.CurrentGame.GraphicsDevice);
+        }
+    }
+
+    internal abstract void LoadContent();
+
+    protected internal virtual void OnPostRender()
+    {
+    }
+
+    protected internal abstract void Update(GameTime gameTime);
 }

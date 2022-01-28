@@ -8,6 +8,8 @@ namespace Olive;
 /// </summary>
 public static class OliveEngine
 {
+    private static readonly List<Component> _liveComponents = new();
+    private static bool s_isInitialized;
     private static Thread? _gameThread;
     private static SceneManager s_sceneManager = new SimpleSceneManager();
 
@@ -30,10 +32,10 @@ public static class OliveEngine
     /// <param name="title">The window title.</param>
     /// <param name="width">The resolution width.</param>
     /// <param name="height">The resolution height.</param>
-    /// <param name="isFullscreen"><see langword="true" /> to enable full screen rendering, otherwise <see langword="false" />.</param>
-    public static void Initialize(string title, int width, int height, bool isFullscreen)
+    /// <param name="displayMode">The game's display mode.</param>
+    public static void Initialize(string title, int width, int height, DisplayMode displayMode)
     {
-        Initialize(title, new Size(width, height), isFullscreen);
+        Initialize(title, new Size(width, height), displayMode);
     }
 
     /// <summary>
@@ -41,14 +43,49 @@ public static class OliveEngine
     /// </summary>
     /// <param name="title">The window title.</param>
     /// <param name="resolution">The screen resolution.</param>
-    /// <param name="isFullscreen"><see langword="true" /> to enable full screen rendering, otherwise <see langword="false" />.</param>
-    public static void Initialize(string title, Size resolution, bool isFullscreen)
+    /// <param name="displayMode">The game's display mode.</param>
+    public static void Initialize(string title, Size resolution, DisplayMode displayMode)
     {
-        CurrentGame = new OliveGame(resolution, title);
+        CurrentGame = new OliveGame(resolution, title, displayMode);
+        s_sceneManager.Initialize();
+        s_isInitialized = true;
+    }
+
+    /// <summary>
+    ///     Runs the game.
+    /// </summary>
+    public static void Run()
+    {
+        if (!s_isInitialized)
+            throw new InvalidOperationException("Cannot run game before engine is initialized.");
 
         _gameThread = new Thread(() => CurrentGame.Run());
         _gameThread.Start();
+    }
 
-        s_sceneManager.PrimaryScene?.Initialize();
+    internal static void AssertNonDisposed<T>(T instance) where T : Component
+    {
+        if (!_liveComponents.Contains(instance) || instance.IsDisposed)
+        {
+            throw new ObjectDisposedException(instance.GetType().Name);
+        }
+    }
+
+    internal static void CreateComponent<T>(T instance) where T : Component
+    {
+        if (!_liveComponents.Contains(instance))
+        {
+            _liveComponents.Add(instance);
+        }
+    }
+
+    internal static void DisposeComponent<T>(T instance) where T : Component
+    {
+        if (!_liveComponents.Contains(instance) && !instance.IsDisposed)
+        {
+            return;
+        }
+
+        _liveComponents.Remove(instance);
     }
 }

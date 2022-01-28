@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Olive.Components;
+using Microsoft.Xna.Framework;
 using Olive.SceneManagement;
 
 namespace Olive;
@@ -10,18 +11,21 @@ namespace Olive;
 /// </summary>
 public sealed class GameObject : IDisposable
 {
+    private readonly List<Coroutine> _coroutines = new();
     private readonly List<Component> _components = new();
-    private bool _isDisposed = false;
     private Transform? _transform; // lazy load of Transform component
     private string _name;
-    private bool _activeSelf;
+    private bool _activeSelf = true;
 
     public GameObject(Scene owningScene)
     {
-        if (owningScene is null) throw new ArgumentNullException(nameof(owningScene));
+        if (owningScene is null)
+        {
+            throw new ArgumentNullException(nameof(owningScene));
+        }
 
         owningScene.AddGameObject(this);
-        AddComponent<Transform3D>();
+        AddComponent<Transform>();
     }
 
     /// <summary>
@@ -36,18 +40,14 @@ public sealed class GameObject : IDisposable
     {
         get
         {
-            Transform? parent = Transform.Parent;
-            if (parent is null) return ActiveSelf;
+            AssertNonDisposed();
 
-            do
+            if (Transform.Parent is { } parent)
             {
-                if (!parent.GameObject.ActiveSelf)
-                    return false;
+                return ActiveSelf && parent.GameObject.ActiveInHierarchy;
+            }
 
-                parent = parent.Parent;
-            } while (parent != null);
-
-            return true;
+            return ActiveSelf;
         }
     }
 
@@ -63,6 +63,12 @@ public sealed class GameObject : IDisposable
             return _activeSelf;
         }
     }
+
+    /// <summary>
+    ///     Gets a value indicating whether this component has been disposed by calling <see cref="Dispose" />.
+    /// </summary>
+    /// <value><see langword="true" /> if the component has been disposed; otherwise, <see langword="false" />.</value>
+    public bool IsDisposed { get; private set; }
 
     /// <summary>
     ///     Gets or sets the name of this game object.
@@ -102,85 +108,102 @@ public sealed class GameObject : IDisposable
     }
 
     /// <summary>
-    ///     Adds the specified component type to the game object.
+    ///     Gets a read-only view of the components in this handler.
     /// </summary>
-    /// <param name="componentFactory">The factory to invoke in order to build the component.</param>
-    /// <returns>The newly-added component.</returns>
-    public T AddComponent<T>(Func<T> componentFactory) where T : Component
-    {
-        AssertNonDisposed();
-
-        if (typeof(T).IsSubclassOf(typeof(Transform)))
-        {
-            throw new ArgumentException("Cannot add multiple transforms to one game object.");
-        }
-
-        T component = componentFactory.Invoke();
-        component.GameObject = this;
-
-        _components.Add(component);
-        if (component is Behavior behavior) behavior.Awake();
-        return component;
-    }
+    /// <value>A read-only view of the components.</value>
+    public IReadOnlyCollection<Component> Components => _components.AsReadOnly();
 
     /// <summary>
-    ///     Adds the specified component type to the game object.
+    ///     Adds a new component to this handler.
     /// </summary>
-    /// <typeparam name="T">The type of the component to add.</typeparam>
+    /// <typeparam name="T">The component type.</typeparam>
     /// <returns>The newly-added component.</returns>
-    public T AddComponent<T>() where T : Component, new()
+    public T AddComponent<T>() where T : Component
     {
         return (T) AddComponent(typeof(T));
     }
 
     /// <summary>
-    ///     Adds the specified component type to the game object.
+    ///     Adds a new component to this handler.
     /// </summary>
-    /// <param name="componentType">The type of the component to add.</param>
+    /// <param name="factory">The factory to invoke in order to fetch the necessary component.</param>
+    /// <typeparam name="T">The component type.</typeparam>
     /// <returns>The newly-added component.</returns>
-    public Component AddComponent(Type componentType)
+    /// <exception cref="ArgumentNullException"><paramref name="factory" /> is <see langword="null" />.</exception>
+    /// <exception cref="InvalidCastException"><paramref name="factory" /> returned invalid component (possibly <see langword="null" />).</exception>
+    public T AddComponent<T>(Func<T> factory) where T : Component
     {
         AssertNonDisposed();
 
-        if (!componentType.IsSubclassOf(typeof(Component)))
+        if (factory is null)
         {
-            throw new ArgumentException($"Type does not inherit {typeof(Component)}");
+            throw new ArgumentNullException(nameof(factory));
         }
 
-        if (componentType.IsAbstract)
+        if (factory.Invoke() is not { } component)
         {
-            throw new ArgumentException("Component is abstract");
+            throw new InvalidCastException("Factory did not return valid behavior. (Perhaps it returned null?)");
         }
-
-        if (componentType == typeof(Transform2D) && GetComponent<Transform2D>() is null)
-        {
-            // Transform2D overrides Transform3D
-            foreach (Transform3D existingTransform in GetComponents<Transform3D>())
-            {
-                RemoveComponent(existingTransform, true);
-                existingTransform.Dispose();
-            }
-        }
-
-        if (componentType.IsSubclassOf(typeof(Transform)) && GetComponent<Transform>() is not null)
-        {
-            throw new ArgumentException("Cannot add multiple transforms to one game object.");
-        }
-
-        var component = (Component) Activator.CreateInstance(componentType)!;
-        component.GameObject = this;
 
         _components.Add(component);
-        if (component is Behavior behavior) behavior.Awake();
-
+        component.GameObject = this;
+        if (component is Behavior behavior) behavior.Initialize();
         return component;
     }
 
     /// <summary>
-    ///     Gets a component of the specified type.
+    ///     Adds a new component to this handler.
     /// </summary>
-    /// <typeparam name="T">The type of the component.</typeparam>
-    /// <returns>The component whose type matches <typeparamref name="T" />, or <see langword="null" /> if no match was found.</returns>
+    /// <param name="type">The component type.</param>
+    /// <returns>The newly-added component.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="type" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentException">
+    ///     <para><paramref name="type" /> does is abstract.</para>
+    ///     -or-
+    ///     <para><paramref name="type" /> does not inherit <see cref="Component" />.</para>
+    /// </exception>
+    public Component AddComponent(Type type)
+    {
+        AssertNonDisposed();
+
+        if (type is null)
+        {
+            throw new ArgumentNullException(nameof(type));
+        }
+
+        if (type.IsAbstract)
+        {
+            throw new ArgumentException("Type cannot be abstract", nameof(type));
+        }
+
+        if (!type.IsSubclassOf(typeof(Component)))
+        {
+            throw new ArgumentException($"Type does not inherit {typeof(Component)}");
+        }
+
+        var component = (Component) Activator.CreateInstance(type)!;
+        _components.Add(component);
+        component.GameObject = this;
+        if (component is Behavior behavior) behavior.Initialize();
+        return component;
+    }
+
+    /// <summary>
+    ///     Gets the specified component.
+    /// </summary>
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <returns>All components whose type matches <typeparamref name="T" />.</returns>
+    public IEnumerable<T> EnumerateComponents<T>()
+    {
+        AssertNonDisposed();
+        return _components.OfType<T>();
+    }
+
+    /// <summary>
+    ///     Gets the specified component.
+    /// </summary>
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <returns>The component whose type matches <typeparamref name="T" />, or <see langword="null" /> on failure.</returns>
     public T? GetComponent<T>()
     {
         AssertNonDisposed();
@@ -188,14 +211,13 @@ public sealed class GameObject : IDisposable
     }
 
     /// <summary>
-    ///     Gets all components of the specified type.
+    ///     Gets the specified component.
     /// </summary>
-    /// <typeparam name="T">The type of the component.</typeparam>
-    /// <returns>The components whose type matches <typeparamref name="T" />.</returns>
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <returns>All components whose type matches <typeparamref name="T" />.</returns>
     public T[] GetComponents<T>()
     {
-        AssertNonDisposed();
-        return _components.OfType<T>().ToArray();
+        return EnumerateComponents<T>().ToArray();
     }
 
     /// <summary>
@@ -225,23 +247,76 @@ public sealed class GameObject : IDisposable
     /// </summary>
     public void Dispose()
     {
-        if (_isDisposed) return;
+        AssertNonDisposed();
 
-        // TODO destroy game object
-        _isDisposed = true;
+        foreach (Component component in _components.ToArray())
+        {
+            component.Dispose(true);
+        }
+
+        IsDisposed = true;
     }
 
     internal void RemoveComponent<T>(T component, bool force = false) where T : Component
     {
         if (component is Transform && !force)
+        {
             throw new InvalidOperationException("Cannot remove the Transform component from a game object.");
+        }
 
         _components.Remove(component);
     }
 
+    internal Coroutine StartCoroutine(IEnumerator enumerator)
+    {
+        var coroutine = new Coroutine(enumerator);
+        _coroutines.Add(coroutine);
+        return coroutine;
+    }
+
+    internal void StopCoroutine(Coroutine coroutine)
+    {
+        _coroutines.Remove(coroutine);
+    }
+
+    internal void Update(GameTime gameTime)
+    {
+        foreach (Behavior behavior in _components.OfType<Behavior>())
+        {
+            behavior.Update(gameTime);
+        }
+
+        for (var index = 0; index < _coroutines.Count; index++)
+        {
+            Coroutine coroutine = _coroutines[index];
+            Stack<IEnumerator> instructions = coroutine.CallStack;
+
+            if (instructions.Count == 0)
+            {
+                _coroutines.RemoveAt(index);
+                index--;
+                continue;
+            }
+
+            IEnumerator instruction = instructions.Peek();
+            if (!instruction.MoveNext())
+            {
+                instructions.Pop();
+                continue;
+            }
+
+            if (instruction.Current is IEnumerator next && instruction != next)
+            {
+                instructions.Push(next);
+            }
+        }
+    }
+
     private void AssertNonDisposed()
     {
-        if (_isDisposed)
-            throw new ObjectDisposedException(Name);
+        if (IsDisposed)
+        {
+            throw new ObjectDisposedException(_name);
+        }
     }
 }
