@@ -64,6 +64,22 @@ public class Transform : Component
                 OliveEngine.AssertNonDisposed(value);
             }
 
+            if (value == this)
+            {
+                throw new InvalidOperationException("Nice try.");
+            }
+
+            Transform? current = value;
+            while (current is not null)
+            {
+                if (current == this)
+                {
+                    throw new InvalidOperationException("Specified parent would lead to recursive structure.");
+                }
+
+                current = current.Parent;
+            }
+
             _parent = value;
         }
     }
