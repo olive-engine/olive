@@ -49,12 +49,12 @@ public abstract class Scene
     /// <returns>The loaded asset.</returns>
     public T LoadContent<T>(string assetName)
     {
-        if (OliveEngine.CurrentGame != null)
+        if (OliveEngine.CurrentGame is { } game)
         {
-            return OliveEngine.CurrentGame.Content.Load<T>(assetName);
+            return game.Content.Load<T>(assetName);
         }
 
-        Trace.Assert(false);
+        Trace.Assert(false, "Impossible state. Game is null."); // if we're here, something is horrendously fucked.
         return default!;
     }
 
