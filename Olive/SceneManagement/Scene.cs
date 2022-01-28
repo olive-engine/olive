@@ -41,6 +41,21 @@ public abstract class Scene
         }
     }
 
+    /// <summary>
+    ///     Loads content into the scene.
+    /// </summary>
+    /// <param name="assetName">The name of the asset to import.</param>
+    /// <typeparam name="T">The asset type.</typeparam>
+    /// <returns>The loaded asset.</returns>
+    public T LoadContent<T>(string assetName)
+    {
+        if (OliveEngine.CurrentGame != null)
+            return OliveEngine.CurrentGame.Content.Load<T>(assetName);
+
+        Trace.Assert(false);
+        return default!;
+    }
+
     protected internal virtual void LoadContent()
     {
     }
