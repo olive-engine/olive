@@ -29,6 +29,12 @@ public abstract class Component : ICloneable, IDisposable
     }
 
     /// <summary>
+    ///     Gets a value indicating whether this component has been disposed by calling <see cref="Dispose" />.
+    /// </summary>
+    /// <value><see langword="true" /> if the component has been disposed; otherwise, <see langword="false" />.</value>
+    public bool IsDisposed { get; private set; }
+
+    /// <summary>
     ///     Gets the transform component attached to this game object.
     /// </summary>
     /// <value>The transform component.</value>
@@ -74,14 +80,26 @@ public abstract class Component : ICloneable, IDisposable
         return GameObject.AddComponent(componentType);
     }
 
+    public virtual object Clone()
+    {
+        OliveEngine.AssertNonDisposed(this);
+        return Activator.CreateInstance(GetType())!;
+    }
+
     /// <summary>
     ///     Disposes all resources allocated by this game object, and removes the object from the scene. 
     /// </summary>
     public void Dispose()
     {
+        Dispose(false);
+    }
+
+    internal void Dispose(bool force)
+    {
         OliveEngine.AssertNonDisposed(this);
-        GameObject.RemoveComponent(this);
+        GameObject.RemoveComponent(this, force);
         OliveEngine.DisposeComponent(this);
+        IsDisposed = true;
     }
 
     /// <summary>
@@ -116,11 +134,5 @@ public abstract class Component : ICloneable, IDisposable
     {
         OliveEngine.AssertNonDisposed(this);
         return GameObject.TryGetComponent(out component);
-    }
-
-    public virtual object Clone()
-    {
-        OliveEngine.AssertNonDisposed(this);
-        return Activator.CreateInstance(GetType())!;
     }
 }

@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Olive.Rendering;
 
@@ -58,7 +58,11 @@ public abstract class Scene
     {
         foreach (GameObject gameObject in _gameObjects)
         {
-            if (!gameObject.ActiveInHierarchy) continue;
+            if (gameObject.IsDisposed || !gameObject.ActiveInHierarchy)
+            {
+                continue;
+            }
+
             gameObject.Update(gameTime);
         }
     }
@@ -94,22 +98,22 @@ public abstract class Scene
         _gameObjects.Add(gameObject);
     }
 
-    internal void Draw(GameTime gameTime)
+    internal bool Draw(GameTime gameTime)
     {
+        if (OliveEngine.CurrentGame?.GraphicsDevice is not { } graphicsDevice)
+        {
+            return false;
+        }
+
         if (Camera.Main is not { } camera)
         {
-            camera = _gameObjects.FirstOrDefault(g => g.ActiveInHierarchy && g.TryGetComponent(out Camera? _))
+            camera = _gameObjects.FirstOrDefault(g => !g.IsDisposed && g.ActiveInHierarchy && g.TryGetComponent(out Camera? _))
                 ?.GetComponent<Camera>();
         }
 
-        if (camera is null)
+        if (camera is null || camera.IsDisposed)
         {
-            return;
-        }
-
-        if (OliveEngine.CurrentGame?.GraphicsDevice is not { } graphicsDevice)
-        {
-            return;
+            return false;
         }
 
         Matrix world = camera.GetWorldMatrix();
@@ -124,5 +128,7 @@ public abstract class Scene
                 renderer.Render(gameTime, world, view, projection);
             }
         }
+
+        return true;
     }
 }

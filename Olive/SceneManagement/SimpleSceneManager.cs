@@ -37,7 +37,10 @@ public sealed class SimpleSceneManager : SceneManager
 
     protected internal override void Draw(GameTime gameTime)
     {
-        CurrentScene?.Draw(gameTime);
+        if (!(CurrentScene?.Draw(gameTime) ?? false) && OliveEngine.CurrentGame?.GraphicsDevice is { } graphicsDevice)
+        {
+            graphicsDevice.Clear(Color.Black);
+        }
     }
 
     protected internal override void Initialize()

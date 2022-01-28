@@ -34,16 +34,25 @@ public sealed class AdditiveSceneManager : SceneManager
 
     protected internal override void Draw(GameTime gameTime)
     {
+        var hasDrawn = false;
         foreach (Scene scene in _scenes.ToArray())
         {
-            scene.Draw(gameTime);
+            if (scene.Draw(gameTime))
+            {
+                hasDrawn = true;
+            }
+        }
+
+        if (!hasDrawn && OliveEngine.CurrentGame?.GraphicsDevice is { } graphicsDevice)
+        {
+            graphicsDevice.Clear(Color.Black);
         }
     }
 
     protected internal override void Initialize()
     {
         base.Initialize();
-        
+
         foreach (Scene scene in _scenes.ToArray())
         {
             scene.Initialize();
