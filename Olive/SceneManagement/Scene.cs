@@ -1,5 +1,6 @@
+﻿using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Olive.Components;
+using Olive.Rendering;
 
 namespace Olive.SceneManagement;
 
@@ -9,12 +10,33 @@ namespace Olive.SceneManagement;
 public abstract class Scene
 {
     private readonly List<GameObject> _gameObjects = new();
+    private Camera _mainCamera;
+
+    protected Scene()
+    {
+        if (this is EmptyScene)
+        {
+            return;
+        }
+
+        MainCamera = new GameObject(this).AddComponent<Camera>();
+    }
 
     /// <summary>
     ///     Gets a read-only view of the game objects currently in the scene.
     /// </summary>
     /// <value>A read-only view of the game objects currently in the scene.</value>
     public IReadOnlyCollection<GameObject> GameObjects => _gameObjects.AsReadOnly();
+
+    /// <summary>
+    ///     Gets or sets the main camera of this scene.
+    /// </summary>
+    /// <value>The main camera.</value>
+    public Camera MainCamera
+    {
+        get => _mainCamera;
+        set => _mainCamera = value ?? throw new ArgumentNullException(nameof(value));
+    }
 
     /// <summary>
     ///     Gets the current scene manager.
@@ -74,12 +96,32 @@ public abstract class Scene
 
     internal void Draw(GameTime gameTime)
     {
+        if (Camera.Main is not { } camera)
+        {
+            camera = _gameObjects.FirstOrDefault(g => g.ActiveInHierarchy && g.TryGetComponent(out Camera? _))
+                ?.GetComponent<Camera>();
+        }
+
+        if (camera is null)
+        {
+            return;
+        }
+
+        if (OliveEngine.CurrentGame?.GraphicsDevice is not { } graphicsDevice)
+        {
+            return;
+        }
+
+        Matrix world = camera.GetWorldMatrix();
+        Matrix view = camera.GetViewMatrix();
+        Matrix projection = camera.GetProjectionMatrix(graphicsDevice);
+
+        graphicsDevice.Clear(camera.ClearColor);
         foreach (GameObject gameObject in _gameObjects)
         {
-            if (gameObject.ActiveInHierarchy && gameObject.TryGetComponent(out Camera? camera))
+            if (gameObject.TryGetComponent(out Renderer? renderer))
             {
-                OliveEngine.CurrentGame?.GraphicsDevice.Clear(camera.ClearColor);
-                break;
+                renderer.Render(gameTime, world, view, projection);
             }
         }
     }
