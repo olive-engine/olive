@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageVersion>0.1.0</PackageVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Olive Engine</Title>
         <Authors>Oliver Booth</Authors>
         <Description>An open-source game engine built on top of MonoGame.</Description>
