@@ -292,6 +292,7 @@ public class Transform : Component
     /// <param name="angle">The angle in degrees.</param>
     public void Rotate(Vector3 axis, float angle)
     {
+        OliveEngine.AssertNonDisposed(this);
         angle = MathHelper.ToRadians(angle);
         Rotation *= Quaternion.CreateFromAxisAngle(axis, angle);
     }
@@ -304,6 +305,7 @@ public class Transform : Component
     /// <param name="angle">The angle in degrees.</param>
     public void RotateAround(Vector3 point, Vector3 axis, float angle)
     {
+        OliveEngine.AssertNonDisposed(this);
         var rotation = Quaternion.CreateFromAxisAngle(axis, angle);
         Vector3 position = Position;
         Vector3 offset = position - point;
