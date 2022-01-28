@@ -143,9 +143,7 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-
-            if (Parent is null) return LocalPosition;
-            return Parent.Position + LocalPosition;
+            return (Parent?.Position ?? Vector3.Zero) + LocalPosition;
         }
         set
         {
@@ -183,9 +181,7 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-
-            if (Parent is null) return LocalRotation;
-            return Parent.Rotation * LocalRotation;
+            return (Parent?.Rotation ?? Quaternion.Identity) * LocalRotation;
         }
         set
         {
@@ -210,9 +206,7 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-
-            if (Parent is null) return LocalScale;
-            return Parent.Scale * LocalScale;
+            return (Parent?.Scale ?? Vector3.One) * LocalScale;
         }
         set
         {
