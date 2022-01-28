@@ -58,6 +58,12 @@ public class Transform : Component
         set
         {
             OliveEngine.AssertNonDisposed(this);
+
+            if (value is not null)
+            {
+                OliveEngine.AssertNonDisposed(value);
+            }
+
             _parent = value;
         }
     }
@@ -148,14 +154,7 @@ public class Transform : Component
         set
         {
             OliveEngine.AssertNonDisposed(this);
-
-            if (Parent is null)
-            {
-                LocalPosition = value;
-                return;
-            }
-
-            LocalPosition = value - Parent.Position;
+            LocalPosition = value - (Parent?.Position ?? Vector3.Zero);
         }
     }
 
@@ -186,14 +185,7 @@ public class Transform : Component
         set
         {
             OliveEngine.AssertNonDisposed(this);
-
-            if (Parent is null)
-            {
-                LocalRotation = value;
-                return;
-            }
-
-            LocalRotation = value / Parent.Rotation;
+            LocalRotation = value / (Parent?.Rotation ?? Quaternion.Identity);
         }
     }
 
@@ -211,14 +203,7 @@ public class Transform : Component
         set
         {
             OliveEngine.AssertNonDisposed(this);
-
-            if (Parent is null)
-            {
-                LocalScale = value;
-                return;
-            }
-
-            LocalScale = value / Parent.Scale;
+            LocalScale = value / (Parent?.Scale ?? Vector3.One);
         }
     }
 
