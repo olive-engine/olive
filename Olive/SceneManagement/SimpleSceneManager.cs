@@ -42,6 +42,7 @@ public sealed class SimpleSceneManager : SceneManager
 
     protected internal override void Initialize()
     {
+        base.Initialize();
         CurrentScene?.Initialize();
     }
 

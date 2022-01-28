@@ -24,7 +24,13 @@ public abstract class SceneManager
 
     protected internal abstract void Draw(GameTime gameTime);
 
-    protected internal abstract void Initialize();
+    protected internal virtual void Initialize()
+    {
+        if (OliveEngine.CurrentGame is not null)
+        {
+            GL.Initialize(OliveEngine.CurrentGame.GraphicsDevice);
+        }
+    }
 
     internal abstract void LoadContent();
 

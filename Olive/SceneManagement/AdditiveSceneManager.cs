@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Olive.SceneManagement;
 
@@ -11,6 +11,8 @@ public sealed class AdditiveSceneManager : SceneManager
 
     public override void LoadScene(Scene scene)
     {
+        base.LoadScene(scene);
+
         if (_scenes.Contains(scene))
         {
             throw new InvalidOperationException("Scene is already loaded.");
@@ -40,7 +42,9 @@ public sealed class AdditiveSceneManager : SceneManager
 
     protected internal override void Initialize()
     {
-        foreach (Scene scene in _scenes)
+        base.Initialize();
+        
+        foreach (Scene scene in _scenes.ToArray())
         {
             scene.Initialize();
         }
