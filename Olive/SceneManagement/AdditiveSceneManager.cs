@@ -28,7 +28,7 @@ public sealed class AdditiveSceneManager : SceneManager
 
     protected internal override void Draw(GameTime gameTime)
     {
-        foreach (Scene scene in _scenes)
+        foreach (Scene scene in _scenes.ToArray())
         {
             scene.Draw(gameTime);
         }
