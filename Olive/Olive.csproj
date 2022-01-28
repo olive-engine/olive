@@ -4,6 +4,17 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageVersion>0.1.0</PackageVersion>
+        <Title>Olive Engine</Title>
+        <Authors>Oliver Booth</Authors>
+        <Description>An open-source game engine built on top of MonoGame.</Description>
+        <PackageProjectUrl>https://github.com/olive-engine/olive/</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/olive-engine/olive/LICENSE.md</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/olive-engine/olive/</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>csharp, game-engine, dotnet, monogame</PackageTags>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
+        <FileVersion>0.1.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
