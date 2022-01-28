@@ -65,7 +65,7 @@ public static class OliveEngine
 
     internal static void AssertNonDisposed<T>(T instance) where T : Component
     {
-        if (!_liveComponents.Contains(instance))
+        if (!_liveComponents.Contains(instance) || instance.IsDisposed)
         {
             throw new ObjectDisposedException(instance.GetType().Name);
         }
@@ -81,7 +81,7 @@ public static class OliveEngine
 
     internal static void DisposeComponent<T>(T instance) where T : Component
     {
-        if (!_liveComponents.Contains(instance))
+        if (!_liveComponents.Contains(instance) && !instance.IsDisposed)
         {
             return;
         }
