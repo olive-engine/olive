@@ -234,6 +234,57 @@ public class Transform : Component
     }
 
     /// <summary>
+    ///     Rotates the transform so that the forward vector points towards the position of another transform.
+    /// </summary>
+    /// <param name="target">The transform to look at.</param>
+    public void LookAt(Transform target)
+    {
+        LookAt(target.Position);
+    }
+
+    /// <summary>
+    ///     Rotates the transform so that the forward vector points towards a specified position.
+    /// </summary>
+    /// <param name="position">The position to look at.</param>
+    public void LookAt(Vector3 position)
+    {
+        LookAt(position, Vector3.Up);
+    }
+
+    /// <summary>
+    ///     Rotates the transform so that the forward vector points towards a specified position.
+    /// </summary>
+    /// <param name="position">The position to look at.</param>
+    /// <param name="up">The world up vector.</param>
+    public void LookAt(Vector3 position, Vector3 up)
+    {
+        // https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function
+
+        Vector3 from = Transform.Position;
+        Vector3 forward = (from - position).Normalized();
+        Vector3 right = Vector3.Cross(up, forward);
+        up = Vector3.Cross(forward, right);
+
+        var camToWorld = new Matrix
+        {
+            [0, 0] = right.X,
+            [0, 1] = right.Y,
+            [0, 2] = right.Z,
+            [1, 0] = up.X,
+            [1, 1] = up.Y,
+            [1, 2] = up.Z,
+            [2, 0] = forward.X,
+            [2, 1] = forward.Y,
+            [2, 2] = forward.Z,
+            [3, 0] = from.X,
+            [3, 1] = from.Y,
+            [3, 2] = from.Z
+        };
+
+        Rotation = Quaternion.CreateFromRotationMatrix(camToWorld);
+    }
+
+    /// <summary>
     ///     Translates the transform by the specified delta.
     /// </summary>
     /// <param name="translation">The world-space translation.</param>
