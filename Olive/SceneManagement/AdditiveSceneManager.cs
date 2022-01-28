@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace Olive.SceneManagement;
 
@@ -44,9 +44,25 @@ public sealed class AdditiveSceneManager : SceneManager
 
     protected internal override void Update(GameTime gameTime)
     {
-        foreach (Scene scene in _scenes)
+        foreach (Scene scene in _scenes.ToArray())
         {
             scene.Update(gameTime);
+        }
+    }
+
+    protected internal override void OnPostRender()
+    {
+        foreach (Scene scene in _scenes.ToArray())
+        {
+            scene.OnPostRender();
+        }
+    }
+
+    internal override void LoadContent()
+    {
+        foreach (Scene scene in _scenes)
+        {
+            scene.LoadContent();
         }
     }
 }

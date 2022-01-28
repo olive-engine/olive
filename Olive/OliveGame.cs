@@ -1,5 +1,6 @@
-using System.Drawing;
+﻿using System.Drawing;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Olive;
 
@@ -22,6 +23,8 @@ internal sealed class OliveGame : Game
         _displayMode = displayMode;
         GraphicsDeviceManager = new GraphicsDeviceManager(this);
     }
+
+    public SpriteBatch SpriteBatch { get; private set; }
 
     internal GraphicsDeviceManager GraphicsDeviceManager { get; }
 
@@ -48,6 +51,7 @@ internal sealed class OliveGame : Game
     {
         base.LoadContent();
 
+        SpriteBatch = new SpriteBatch(GraphicsDevice);
         OliveEngine.SceneManager.LoadContent();
     }
 
@@ -56,6 +60,10 @@ internal sealed class OliveGame : Game
         base.Draw(gameTime);
 
         OliveEngine.SceneManager.Draw(gameTime);
+
+        SpriteBatch.Begin(SpriteSortMode.Immediate, depthStencilState: GraphicsDevice.DepthStencilState);
+        OliveEngine.SceneManager.OnPostRender();
+        SpriteBatch.End();
     }
 
     protected override void Update(GameTime gameTime)

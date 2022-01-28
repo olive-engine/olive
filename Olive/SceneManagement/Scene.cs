@@ -45,6 +45,10 @@ public abstract class Scene
     {
     }
 
+    protected internal virtual void OnPostRender()
+    {
+    }
+
     internal virtual void AddGameObject(GameObject gameObject)
     {
         if (_gameObjects.Contains(gameObject)) return;

@@ -45,6 +45,11 @@ public sealed class SimpleSceneManager : SceneManager
         CurrentScene?.Initialize();
     }
 
+    protected internal override void OnPostRender()
+    {
+        CurrentScene?.OnPostRender();
+    }
+
     protected internal override void Update(GameTime gameTime)
     {
         CurrentScene?.Update(gameTime);

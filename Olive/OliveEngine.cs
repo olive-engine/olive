@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using Olive.Components;
 using Olive.SceneManagement;
 
 namespace Olive;
