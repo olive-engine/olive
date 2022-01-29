@@ -70,6 +70,11 @@ internal sealed class OliveGame : Game
     {
         base.Update(gameTime);
 
-        OliveEngine.SceneManager.Update(gameTime);
+        var frameContext = new FrameContext
+        {
+            DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds,
+            TotalTime = (float) gameTime.TotalGameTime.TotalSeconds
+        };
+        OliveEngine.SceneManager.Update(frameContext);
     }
 }

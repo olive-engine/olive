@@ -1,6 +1,5 @@
 ﻿using Olive;
 using Olive.Math;
-using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace BehaviorExample;
 
@@ -18,11 +17,11 @@ internal sealed class FloatingBehavior : Behavior
         _initialPos = Transform.Position;
     }
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(FrameContext context)
     {
-        base.Update(gameTime);
+        base.Update(context);
 
-        _time = (_time + (float) gameTime.ElapsedGameTime.TotalSeconds * Frequency) % (MathF.PI * 2);
+        _time = (_time + context.DeltaTime * Frequency) % (MathF.PI * 2);
         Transform.Position = _initialPos + Vector3.Up * (MathF.Sin(_time) * Amplitude);
     }
 }

@@ -72,11 +72,11 @@ public sealed class AdditiveSceneManager : SceneManager
         }
     }
 
-    protected internal override void Update(GameTime gameTime)
+    protected internal override void Update(FrameContext context)
     {
         foreach (Scene scene in _scenes.ToArray())
         {
-            scene.Update(gameTime);
+            scene.Update(context);
         }
     }
 

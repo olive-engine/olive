@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Xna.Framework;
 using Olive.SceneManagement;
 
 namespace Olive;
@@ -286,11 +285,11 @@ public sealed class GameObject : IDisposable
         _coroutines.Remove(coroutine);
     }
 
-    internal void Update(GameTime gameTime)
+    internal void Update(FrameContext context)
     {
         foreach (Behavior behavior in _components.OfType<Behavior>())
         {
-            behavior.Update(gameTime);
+            behavior.Update(context);
         }
 
         for (var index = 0; index < _coroutines.Count; index++)

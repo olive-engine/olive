@@ -3,7 +3,6 @@ using Olive;
 using Olive.Math;
 using Olive.Rendering;
 using Olive.SceneManagement;
-using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace SceneTransformExample;
 
@@ -32,11 +31,11 @@ internal sealed class MonkeyPlaneScene : Scene
         centerMonkey.AddComponent<ModelRenderer>().Model = LoadContent<Model>("monkey");
     }
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(FrameContext context)
     {
-        base.Update(gameTime);
+        base.Update(context);
 
-        _time = (float) (_time + gameTime.ElapsedGameTime.TotalSeconds) % (MathF.PI * 2);
+        _time = (_time + context.DeltaTime) % (MathF.PI * 2);
         Transform.Position = Vector3.Up * MathF.Sin(_time);
     }
 }

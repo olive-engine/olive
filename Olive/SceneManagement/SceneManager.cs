@@ -38,5 +38,5 @@ public abstract class SceneManager
     {
     }
 
-    protected internal abstract void Update(GameTime gameTime);
+    protected internal abstract void Update(FrameContext context);
 }

@@ -1,7 +1,6 @@
 ﻿using MonoGame.Extended.Input;
 using Olive;
 using Olive.Math;
-using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace BehaviorExample.FirstPersonMovement;
 
@@ -28,9 +27,9 @@ internal sealed class MouseLookBehavior : Behavior
         Transform.Rotation = Quaternion.Identity;
     }
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(FrameContext context)
     {
-        base.Update(gameTime);
+        base.Update(context);
 
         MouseStateExtended mouseState = MouseExtended.GetState();
         if (!mouseState.PositionChanged)
@@ -38,9 +37,8 @@ internal sealed class MouseLookBehavior : Behavior
             return;
         }
 
-        var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
-        float mouseX = mouseState.DeltaX * deltaTime * _mouseSensitivity.X;
-        float mouseY = mouseState.DeltaY * deltaTime * _mouseSensitivity.Y;
+        float mouseX = mouseState.DeltaX * context.DeltaTime * _mouseSensitivity.X;
+        float mouseY = mouseState.DeltaY * context.DeltaTime * _mouseSensitivity.Y;
 
         _xRotation += mouseY;
         _xRotation = Math.Clamp(_xRotation, -90, 90);

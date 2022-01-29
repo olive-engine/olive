@@ -1,7 +1,6 @@
 ﻿using Olive;
 using Olive.Math;
 using Olive.SceneManagement;
-using GameTime = Microsoft.Xna.Framework.GameTime;
 
 OliveEngine.Initialize("GL Example", 800, 600, DisplayMode.Windowed);
 OliveEngine.Run();
@@ -21,12 +20,11 @@ internal sealed class MainScene : Scene
         _cameraTransform.Position = Vector3.Backward;
     }
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(FrameContext context)
     {
-        base.Update(gameTime);
+        base.Update(context);
 
-        var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
-        _cameraTransform.RotateAround(Vector3.Zero, Vector3.Up, deltaTime);
+        _cameraTransform.RotateAround(Vector3.Zero, Vector3.Up, context.DeltaTime);
         _cameraTransform.LookAt(Vector3.Zero);
     }
 

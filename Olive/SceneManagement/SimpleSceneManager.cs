@@ -71,9 +71,9 @@ public sealed class SimpleSceneManager : SceneManager
         CurrentScene?.OnPostRender();
     }
 
-    protected internal override void Update(GameTime gameTime)
+    protected internal override void Update(FrameContext context)
     {
-        CurrentScene?.Update(gameTime);
+        CurrentScene?.Update(context);
     }
 
     internal override void LoadContent()

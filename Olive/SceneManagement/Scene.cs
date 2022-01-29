@@ -63,7 +63,8 @@ public abstract class Scene
     /// <summary>
     ///     Called once per frame.
     /// </summary>
-    protected internal virtual void Update(GameTime gameTime)
+    /// <param name="context">An object providing frame-specific information.</param>
+    protected internal virtual void Update(FrameContext context)
     {
         foreach (GameObject gameObject in _gameObjects)
         {
@@ -72,7 +73,7 @@ public abstract class Scene
                 continue;
             }
 
-            gameObject.Update(gameTime);
+            gameObject.Update(context);
         }
     }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Olive;
 using Olive.Math;
-using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace BehaviorExample.FirstPersonMovement;
 
@@ -9,9 +8,9 @@ internal sealed class FirstPersonMovementBehavior : Behavior
 {
     private const float MovementSpeed = 1.0f;
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(FrameContext context)
     {
-        base.Update(gameTime);
+        base.Update(context);
 
         Vector3 forward = Transform.Forward;
         Vector3 right = Transform.Right;
@@ -28,7 +27,6 @@ internal sealed class FirstPersonMovementBehavior : Behavior
         if (keyboardState.IsKeyDown(Keys.E)) movement += Vector3.Up;
         else if (keyboardState.IsKeyDown(Keys.Q)) movement -= Vector3.Up;
 
-        var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
-        Transform.Translate(movement * (deltaTime * MovementSpeed));
+        Transform.Translate(movement * (context.DeltaTime * MovementSpeed));
     }
 }

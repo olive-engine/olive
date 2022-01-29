@@ -3,7 +3,6 @@ using Olive;
 using Olive.Math;
 using Olive.Rendering;
 using Olive.SceneManagement;
-using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace SceneTransformExample;
 
@@ -31,10 +30,10 @@ internal sealed class OuterMonkeyScene : Scene
         }
     }
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(FrameContext context)
     {
-        base.Update(gameTime);
+        base.Update(context);
 
-        Transform.Rotate(Vector3.Up, 45 * (float) gameTime.ElapsedGameTime.TotalSeconds);
+        Transform.Rotate(Vector3.Up, 45 * context.DeltaTime);
     }
 }

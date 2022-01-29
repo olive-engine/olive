@@ -2,7 +2,6 @@
 using MonoGame.Extended.Input;
 using Olive;
 using Olive.SceneManagement;
-using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace MultipleScenes;
 
@@ -15,9 +14,9 @@ internal sealed class RedScene : Scene
         MainCamera.ClearColor = Color.Red;
     }
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(FrameContext context)
     {
-        base.Update(gameTime);
+        base.Update(context);
 
         KeyboardStateExtended keyboardState = KeyboardExtended.GetState();
         if (keyboardState.WasKeyJustDown(Keys.Space))
