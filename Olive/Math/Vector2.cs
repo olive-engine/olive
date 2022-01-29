@@ -85,7 +85,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     ///     Gets a value indicating whether this vector is normalized.
     /// </summary>
     /// <value><see langword="true" /> if this vector is normalized; otherwise, <see langword="false" />.</value>
-    public bool IsNormalized => MathF.Abs(LengthSquared - 1) < float.Epsilon;
+    public bool IsNormalized => MathUtils.Approximately(LengthSquared, 1);
 
     /// <summary>
     ///     Gets the length of the vector.
