@@ -17,13 +17,14 @@ public sealed class GameObject : IDisposable
     private string _name;
     private bool _activeSelf = true;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="GameObject" /> class. 
+    /// </summary>
+    /// <param name="owningScene">The owning scene.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="owningScene" /> is <see langword="null" />.</exception>
     public GameObject(Scene owningScene)
     {
-        if (owningScene is null)
-        {
-            throw new ArgumentNullException(nameof(owningScene));
-        }
-
+        OwningScene = owningScene ?? throw new ArgumentNullException(nameof(owningScene));
         owningScene.AddGameObject(this);
         AddComponent<Transform>();
     }
@@ -87,6 +88,12 @@ public sealed class GameObject : IDisposable
             _name = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
         }
     }
+
+    /// <summary>
+    ///     Gets the scene which owns this game object.
+    /// </summary>
+    /// <value>The scene which owns this game object.</value>
+    public Scene OwningScene { get; }
 
     /// <summary>
     ///     Gets the transform component attached to this game object.

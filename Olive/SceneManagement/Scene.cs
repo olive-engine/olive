@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Olive.Rendering;
 
@@ -26,7 +26,7 @@ public abstract class Scene
     ///     Gets a read-only view of the game objects currently in the scene.
     /// </summary>
     /// <value>A read-only view of the game objects currently in the scene.</value>
-    public IReadOnlyCollection<GameObject> GameObjects => _gameObjects.AsReadOnly();
+    public IReadOnlyCollection<GameObject> GameObjects => _gameObjects.Where(g => !g.IsDisposed).ToArray();
 
     /// <summary>
     ///     Gets or sets the main camera of this scene.
@@ -35,7 +35,7 @@ public abstract class Scene
     public Camera MainCamera
     {
         get => _mainCamera;
-        set => _mainCamera = Camera.Main = value ?? throw new ArgumentNullException(nameof(value));
+        set => _mainCamera = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     /// <summary>
@@ -43,7 +43,13 @@ public abstract class Scene
     /// </summary>
     /// <value>The scene manager.</value>
     public SceneManager SceneManager { get; internal set; } = null!;
-    
+
+    /// <summary>
+    ///     Gets the scene transform data.
+    /// </summary>
+    /// <value>The scene transform data.</value>
+    public SceneTransform Transform { get; } = new();
+
     internal bool IsInitialized { get; private set; }
 
     /// <summary>
@@ -103,18 +109,38 @@ public abstract class Scene
 
     internal bool Draw(GameTime gameTime)
     {
+        Camera? FindMainCamera()
+        {
+            Camera? camera = Camera.Main;
+            if (camera is not null && !camera.IsDisposed)
+            {
+                return camera;
+            }
+
+            for (var index = 0; index < _gameObjects.Count; index++)
+            {
+                GameObject gameObject = _gameObjects[index];
+                if (gameObject.IsDisposed || !gameObject.ActiveInHierarchy)
+                {
+                    continue;
+                }
+
+                if (gameObject.TryGetComponent(out camera))
+                {
+                    return camera;
+                }
+            }
+
+            return null;
+        }
+
         if (OliveEngine.CurrentGame?.GraphicsDevice is not { } graphicsDevice)
         {
             return false;
         }
 
-        if (Camera.Main is not { } camera)
-        {
-            camera = _gameObjects.FirstOrDefault(g => !g.IsDisposed && g.ActiveInHierarchy && g.TryGetComponent(out Camera? _))
-                ?.GetComponent<Camera>();
-        }
-
-        if (camera is null || camera.IsDisposed)
+        Camera? camera = FindMainCamera();
+        if (camera is null or {IsDisposed: true})
         {
             return false;
         }
@@ -123,10 +149,9 @@ public abstract class Scene
         Matrix view = camera.GetViewMatrix();
         Matrix projection = camera.GetProjectionMatrix(graphicsDevice);
 
-        graphicsDevice.Clear(camera.ClearColor);
         foreach (GameObject gameObject in _gameObjects)
         {
-            if (gameObject.TryGetComponent(out Renderer? renderer))
+            if (!gameObject.IsDisposed && gameObject.TryGetComponent(out Renderer? renderer))
             {
                 renderer.Render(gameTime, world, view, projection);
             }

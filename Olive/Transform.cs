@@ -64,6 +64,22 @@ public class Transform : Component
                 OliveEngine.AssertNonDisposed(value);
             }
 
+            if (value == this)
+            {
+                throw new InvalidOperationException("Nice try.");
+            }
+
+            Transform? current = value;
+            while (current is not null)
+            {
+                if (current == this)
+                {
+                    throw new InvalidOperationException("Specified parent would lead to recursive structure.");
+                }
+
+                current = current.Parent;
+            }
+
             _parent = value;
         }
     }
@@ -149,12 +165,19 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-            return (Parent?.Position ?? Vector3.Zero) + LocalPosition;
+
+            if (Parent is null)
+            {
+                return GameObject.OwningScene.Transform.Position + LocalPosition;
+            }
+
+            return Parent.Position + LocalPosition;
         }
         set
         {
             OliveEngine.AssertNonDisposed(this);
-            LocalPosition = value - (Parent?.Position ?? Vector3.Zero);
+            Vector3 offset = Parent?.Position ?? GameObject.OwningScene.Transform.Position;
+            LocalPosition = value - offset;
         }
     }
 
@@ -180,12 +203,19 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-            return (Parent?.Rotation ?? Quaternion.Identity) * LocalRotation;
+
+            if (Parent is null)
+            {
+                return GameObject.OwningScene.Transform.Rotation * LocalRotation;
+            }
+
+            return Parent.Rotation * LocalRotation;
         }
         set
         {
             OliveEngine.AssertNonDisposed(this);
-            LocalRotation = value / (Parent?.Rotation ?? Quaternion.Identity);
+            Quaternion offset = Parent?.Rotation ?? GameObject.OwningScene.Transform.Rotation;
+            LocalRotation = value / offset;
         }
     }
 
@@ -198,12 +228,19 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-            return (Parent?.Scale ?? Vector3.One) * LocalScale;
+
+            if (Parent is null)
+            {
+                return GameObject.OwningScene.Transform.Scale + LocalScale;
+            }
+
+            return Parent.Scale + LocalScale;
         }
         set
         {
             OliveEngine.AssertNonDisposed(this);
-            LocalScale = value / (Parent?.Scale ?? Vector3.One);
+            Vector3 offset = Parent?.Scale ?? GameObject.OwningScene.Transform.Scale;
+            LocalScale = value / offset;
         }
     }
 
@@ -260,7 +297,7 @@ public class Transform : Component
     {
         // https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function
 
-        Vector3 from = Transform.Position;
+        Vector3 from = Position;
         Vector3 forward = (from - position).Normalized();
         Vector3 right = Vector3.Cross(up, forward);
         up = Vector3.Cross(forward, right);
@@ -311,8 +348,7 @@ public class Transform : Component
     public void Rotate(Vector3 rotation)
     {
         OliveEngine.AssertNonDisposed(this);
-        (float pitch, float yaw, float roll) = rotation;
-        Rotation *= Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll);
+        Rotation *= rotation.ToQuaternion();
     }
 
     /// <summary>
@@ -347,9 +383,9 @@ public class Transform : Component
     internal Matrix GetWorldMatrix(Matrix worldMatrix)
     {
         OliveEngine.AssertNonDisposed(this);
-        return Matrix.CreateFromQuaternion(Rotation)
+        return Matrix.CreateTranslation(Position)
+               * Matrix.CreateFromQuaternion(Rotation)
                * Matrix.CreateScale(Scale)
-               * Matrix.CreateTranslation(Position)
                * worldMatrix;
     }
 }

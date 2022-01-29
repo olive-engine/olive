@@ -42,14 +42,24 @@ public sealed class SimpleSceneManager : SceneManager
     {
         base.Initialize();
 
+        Camera? mainCamera = Camera.Main;
         if (!(CurrentScene?.IsInitialized ?? false))
         {
             CurrentScene?.Initialize();
+            if (CurrentScene?.MainCamera is null or {IsDisposed: true})
+            {
+                Camera.Main = mainCamera;
+            }
         }
     }
 
     protected internal override void Draw(GameTime gameTime)
     {
+        if (Camera.Main is { } camera)
+        {
+            OliveEngine.CurrentGame!.GraphicsDevice.Clear(camera.ClearColor);
+        }
+        
         if (!(CurrentScene?.Draw(gameTime) ?? false) && OliveEngine.CurrentGame?.GraphicsDevice is { } graphicsDevice)
         {
             graphicsDevice.Clear(Color.Black);
