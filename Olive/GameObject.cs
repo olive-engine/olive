@@ -24,6 +24,8 @@ public sealed class GameObject : IDisposable
             throw new ArgumentNullException(nameof(owningScene));
         }
 
+        OwningScene = owningScene;
+
         owningScene.AddGameObject(this);
         AddComponent<Transform>();
     }
@@ -87,6 +89,12 @@ public sealed class GameObject : IDisposable
             _name = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
         }
     }
+
+    /// <summary>
+    ///     Gets the scene which owns this game object.
+    /// </summary>
+    /// <value>The scene which owns this game object.</value>
+    public Scene OwningScene { get; }
 
     /// <summary>
     ///     Gets the transform component attached to this game object.
