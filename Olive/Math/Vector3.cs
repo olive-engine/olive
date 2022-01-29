@@ -102,6 +102,17 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     }
 
     /// <summary>
+    ///     Initializes a new instance of the <see cref="Vector3" /> structure by copying the <see cref="Vector2.X" /> and
+    ///     <see cref="Vector2.Y" /> of a <see cref="Vector2" /> to their respective component values, and assigning
+    ///     <see cref="Z" /> a specified value.
+    /// </summary>
+    /// <param name="vector">The two-dimensional vector to copy.</param>
+    /// <param name="z">The value to assign to <see cref="Z" />.</param>
+    public Vector3(in Vector2 vector, float z) : this(vector.X, vector.Y, z)
+    {
+    }
+
+    /// <summary>
     ///     Gets a value indicating whether this vector is normalized.
     /// </summary>
     /// <value><see langword="true" /> if this vector is normalized; otherwise, <see langword="false" />.</value>
