@@ -10,12 +10,16 @@ internal sealed class MainScene : Scene
 {
     private GameObject? _monkey;
 
+    public MainScene() : base("Main Scene")
+    {
+    }
+
     protected override void Initialize()
     {
         base.Initialize();
 
         (_monkey = new GameObject(this)).AddComponent<ModelRenderer>();
-        MainCamera.Transform.Position = Vector3.Backward;
+        new GameObject(this).AddComponent<Camera>().Transform.Position = Vector3.Backward;
     }
 
     protected override void LoadContent()

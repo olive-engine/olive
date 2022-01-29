@@ -6,11 +6,15 @@ namespace SceneTransformExample;
 
 internal sealed class CameraScene : Scene
 {
+    public CameraScene() : base("Camera Scene")
+    {
+    }
+
     protected override void Initialize()
     {
         base.Initialize();
 
-        MainCamera.Transform.Position = Vector3.Backward * 2;
-        Camera.Main = MainCamera;
+        var camera = new GameObject(this).AddComponent<Camera>();
+        camera.Transform.Position = Vector3.Backward * 2;
     }
 }

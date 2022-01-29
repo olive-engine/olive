@@ -11,15 +11,15 @@ public abstract class Scene
 {
     private readonly List<GameObject> _gameObjects = new();
     private Camera _mainCamera;
+    private readonly string _name = null!;
 
-    protected Scene()
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Scene" /> class.
+    /// </summary>
+    /// <param name="name">The name of the scene.</param>
+    protected Scene(string name)
     {
-        if (this is EmptyScene)
-        {
-            return;
-        }
-
-        MainCamera = new GameObject(this).AddComponent<Camera>();
+        Name = name;
     }
 
     /// <summary>
@@ -29,20 +29,14 @@ public abstract class Scene
     public IReadOnlyCollection<GameObject> GameObjects => _gameObjects.Where(g => !g.IsDisposed).ToArray();
 
     /// <summary>
-    ///     Gets or sets the main camera of this scene.
+    ///     Gets the name of the scene.
     /// </summary>
-    /// <value>The main camera.</value>
-    public Camera MainCamera
+    /// <value>The name of the scene.</value>
+    public string Name
     {
-        get => _mainCamera;
-        set => _mainCamera = value ?? throw new ArgumentNullException(nameof(value));
+        get => _name;
+        protected init => _name = string.IsNullOrWhiteSpace(value) ? "Untitled Scene" : value.Trim();
     }
-
-    /// <summary>
-    ///     Gets the current scene manager.
-    /// </summary>
-    /// <value>The scene manager.</value>
-    public SceneManager SceneManager { get; internal set; } = null!;
 
     /// <summary>
     ///     Gets the scene transform data.
@@ -57,7 +51,23 @@ public abstract class Scene
     /// </summary>
     protected internal virtual void Initialize()
     {
+        if (IsInitialized)
+        {
+            return;
+        }
+
         IsInitialized = true;
+
+        for (var index = 0; index < _gameObjects.Count; index++) // enumerator alloc is wasteful
+        {
+            GameObject gameObject = _gameObjects[index];
+            if (gameObject.IsDisposed || !gameObject.ActiveInHierarchy)
+            {
+                continue;
+            }
+
+            gameObject.Initialize();
+        }
     }
 
     /// <summary>
@@ -66,8 +76,9 @@ public abstract class Scene
     /// <param name="context">An object providing frame-specific information.</param>
     protected internal virtual void Update(FrameContext context)
     {
-        foreach (GameObject gameObject in _gameObjects)
+        for (var index = 0; index < _gameObjects.Count; index++) // enumerator alloc is wasteful
         {
+            GameObject gameObject = _gameObjects[index];
             if (gameObject.IsDisposed || !gameObject.ActiveInHierarchy)
             {
                 continue;

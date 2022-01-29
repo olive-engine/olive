@@ -12,6 +12,10 @@ internal sealed class MainScene : Scene
     private GameObject _monkey = null!;
     private Transform _playerBody = null!;
 
+    public MainScene() : base("Main Scene")
+    {
+    }
+
     protected override void Initialize()
     {
         base.Initialize();
@@ -23,9 +27,10 @@ internal sealed class MainScene : Scene
         _playerBody = new GameObject(this).Transform;
         _playerBody.Position = Vector3.Backward;
 
-        MainCamera.AddComponent<FirstPersonMovementBehavior>();
-        MainCamera.AddComponent(() => new MouseLookBehavior(_playerBody)); // AddComponent supports DI!
-        MainCamera.Transform.Parent = _playerBody;
+        var camera = new GameObject(this).AddComponent<Camera>();
+        camera.AddComponent<FirstPersonMovementBehavior>();
+        camera.AddComponent(() => new MouseLookBehavior(_playerBody)); // AddComponent supports DI!
+        camera.Transform.Parent = _playerBody;
     }
 
     protected override void LoadContent()

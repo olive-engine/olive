@@ -8,12 +8,8 @@ namespace SceneTransformExample;
 
 internal sealed class OuterMonkeyScene : Scene
 {
-    protected override void Initialize()
+    public OuterMonkeyScene() : base("Outer Monkey Scene")
     {
-        base.Initialize();
-
-        // we don't want more than one camera. let the camera in CameraScene do the work
-        MainCamera.GameObject.Dispose();
     }
 
     protected override void LoadContent()

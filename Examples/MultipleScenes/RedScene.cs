@@ -7,11 +7,16 @@ namespace MultipleScenes;
 
 internal sealed class RedScene : Scene
 {
+    public RedScene() : base("Red Scene")
+    {
+    }
+
     protected override void Initialize()
     {
         base.Initialize();
 
-        MainCamera.ClearColor = Color.Red;
+        var camera = new GameObject(this);
+        camera.AddComponent<Camera>().ClearColor = Color.Red;
     }
 
     protected override void Update(FrameContext context)

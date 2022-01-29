@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using Olive.SceneManagement;
 
 namespace Olive;
 
@@ -11,18 +10,6 @@ public static class OliveEngine
     private static readonly List<Component> _liveComponents = new();
     private static bool s_isInitialized;
     private static Thread? _gameThread;
-    private static SceneManager s_sceneManager = new SimpleSceneManager();
-
-    /// <summary>
-    ///     Gets or sets the current scene manager.
-    /// </summary>
-    /// <value>The current scene manager.</value>
-    /// <exception cref="ArgumentNullException"><paramref name="value" /> is <see langword="null" />.</exception>
-    public static SceneManager SceneManager
-    {
-        get => s_sceneManager;
-        set => s_sceneManager = value ?? throw new ArgumentNullException(nameof(value));
-    }
 
     internal static OliveGame? CurrentGame { get; private set; }
 
@@ -47,7 +34,6 @@ public static class OliveEngine
     public static void Initialize(string title, Size resolution, DisplayMode displayMode)
     {
         CurrentGame = new OliveGame(resolution, title, displayMode);
-        s_sceneManager.Initialize();
         s_isInitialized = true;
     }
 

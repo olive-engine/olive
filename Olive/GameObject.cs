@@ -285,9 +285,17 @@ public sealed class GameObject : IDisposable
         _coroutines.Remove(coroutine);
     }
 
+    internal void Initialize()
+    {
+        foreach (Behavior behavior in EnumerateComponents<Behavior>())
+        {
+            behavior.Initialize();
+        }
+    }
+
     internal void Update(FrameContext context)
     {
-        foreach (Behavior behavior in _components.OfType<Behavior>())
+        foreach (Behavior behavior in EnumerateComponents<Behavior>())
         {
             behavior.Update(context);
         }

@@ -7,11 +7,16 @@ namespace MultipleScenes;
 
 internal sealed class BlueScene : Scene
 {
+    public BlueScene() : base("Blue Scene")
+    {
+    }
+
     protected override void Initialize()
     {
         base.Initialize();
 
-        MainCamera.ClearColor = Color.Blue;
+        var camera = new GameObject(this);
+        camera.AddComponent<Camera>().ClearColor = Color.Blue;
     }
 
     protected override void Update(FrameContext context)

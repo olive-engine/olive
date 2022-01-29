@@ -1,6 +1,8 @@
-﻿using System.Drawing;
+using System.Drawing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Olive.Rendering;
+using Olive.SceneManagement;
 
 namespace Olive;
 
@@ -44,7 +46,11 @@ internal sealed class OliveGame : Game
         Window.Title = _title;
         base.Initialize();
 
-        OliveEngine.SceneManager.Initialize();
+        for (var index = 0; index < SceneManager.LoadedScenes.Count; index++)
+        {
+            Scene scene = SceneManager.LoadedScenes[index];
+            scene.Initialize();
+        }
     }
 
     protected override void LoadContent()
@@ -52,7 +58,7 @@ internal sealed class OliveGame : Game
         base.LoadContent();
 
         SpriteBatch = new SpriteBatch(GraphicsDevice);
-        OliveEngine.SceneManager.LoadContent();
+        // OliveEngine.SceneManager.LoadContent();
     }
 
     protected override void Draw(GameTime gameTime)
@@ -75,6 +81,11 @@ internal sealed class OliveGame : Game
             DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds,
             TotalTime = (float) gameTime.TotalGameTime.TotalSeconds
         };
-        OliveEngine.SceneManager.Update(frameContext);
+
+        for (var index = 0; index < SceneManager.LoadedScenes.Count; index++)
+        {
+            Scene scene = SceneManager.LoadedScenes[index];
+            scene.Update(frameContext);
+        }
     }
 }
