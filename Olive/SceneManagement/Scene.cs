@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Olive.Rendering;
 
@@ -26,7 +26,7 @@ public abstract class Scene
     ///     Gets a read-only view of the game objects currently in the scene.
     /// </summary>
     /// <value>A read-only view of the game objects currently in the scene.</value>
-    public IReadOnlyCollection<GameObject> GameObjects => _gameObjects.AsReadOnly();
+    public IReadOnlyCollection<GameObject> GameObjects => _gameObjects.Where(g => !g.IsDisposed).ToArray();
 
     /// <summary>
     ///     Gets or sets the main camera of this scene.
@@ -35,7 +35,7 @@ public abstract class Scene
     public Camera MainCamera
     {
         get => _mainCamera;
-        set => _mainCamera = Camera.Main = value ?? throw new ArgumentNullException(nameof(value));
+        set => _mainCamera = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     /// <summary>
@@ -43,7 +43,13 @@ public abstract class Scene
     /// </summary>
     /// <value>The scene manager.</value>
     public SceneManager SceneManager { get; internal set; } = null!;
-    
+
+    /// <summary>
+    ///     Gets the scene transform data.
+    /// </summary>
+    /// <value>The scene transform data.</value>
+    public SceneTransform Transform { get; } = new();
+
     internal bool IsInitialized { get; private set; }
 
     /// <summary>
