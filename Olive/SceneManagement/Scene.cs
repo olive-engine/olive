@@ -35,7 +35,7 @@ public abstract class Scene
     public Camera MainCamera
     {
         get => _mainCamera;
-        set => _mainCamera = Camera.Main = value ?? throw new ArgumentNullException(nameof(value));
+        set => _mainCamera = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     /// <summary>
