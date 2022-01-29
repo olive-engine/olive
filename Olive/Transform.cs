@@ -75,7 +75,7 @@ public sealed class Transform : Component, IEnumerable<Transform>
         {
             OliveEngine.AssertNonDisposed(this);
 
-            if (value is null && _parent is not null)
+            if (value != _parent && _parent is not null)
             {
                 _parent._children.Remove(this);
             }
