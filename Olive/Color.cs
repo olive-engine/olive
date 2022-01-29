@@ -232,16 +232,6 @@ public readonly struct Color : IEquatable<Color>, IFormattable
     public byte R { get; init; }
 
     /// <summary>
-    ///     Inverts a given color.
-    /// </summary>
-    /// <param name="value">The color to invert.</param>
-    /// <returns>The inverted vector.</returns>
-    public static Color operator -(in Color value)
-    {
-        return new Color((byte) (255 - value.R), (byte) (255 - value.G), (byte) (255 - value.B), (byte) (255 - value.A));
-    }
-
-    /// <summary>
     ///     Returns a value indicating whether the two given colors are equal.
     /// </summary>
     /// <param name="left">The first color to compare.</param>
@@ -271,6 +261,16 @@ public readonly struct Color : IEquatable<Color>, IFormattable
     public static explicit operator Color(in ColorF value)
     {
         return new Color((byte) (value.R * 255f), (byte) (value.G * 255f), (byte) (value.B * 255f), (byte) (value.A * 255f));
+    }
+
+    /// <summary>
+    ///     Inverts a given color.
+    /// </summary>
+    /// <param name="value">The color to invert.</param>
+    /// <returns>The inverted vector.</returns>
+    public static Color Invert(in Color value)
+    {
+        return new Color((byte) (255 - value.R), (byte) (255 - value.G), (byte) (255 - value.B), (byte) (255 - value.A));
     }
 
     /// <summary>

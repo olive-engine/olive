@@ -131,16 +131,6 @@ public readonly struct ColorF
     }
 
     /// <summary>
-    ///     Inverts a given color.
-    /// </summary>
-    /// <param name="value">The color to invert.</param>
-    /// <returns>The inverted vector.</returns>
-    public static ColorF operator -(in ColorF value)
-    {
-        return new ColorF(1 - value.R, 1 - value.G, 1 - value.B, 1 - value.A);
-    }
-
-    /// <summary>
     ///     Returns a value indicating whether the two given colors are equal.
     /// </summary>
     /// <param name="left">The first color to compare.</param>
@@ -170,6 +160,16 @@ public readonly struct ColorF
     public static implicit operator ColorF(in Color value)
     {
         return new ColorF(value.R / 255f, value.G / 255f, value.B / 255f, value.A / 255f);
+    }
+
+    /// <summary>
+    ///     Inverts a given color.
+    /// </summary>
+    /// <param name="value">The color to invert.</param>
+    /// <returns>The inverted vector.</returns>
+    public static ColorF Invert(in ColorF value)
+    {
+        return new ColorF(1 - value.R, 1 - value.G, 1 - value.B, 1 - value.A);
     }
 
     /// <summary>
