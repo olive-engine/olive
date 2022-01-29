@@ -43,7 +43,13 @@ public abstract class Scene
     /// </summary>
     /// <value>The scene manager.</value>
     public SceneManager SceneManager { get; internal set; } = null!;
-    
+
+    /// <summary>
+    ///     Gets the scene transform data.
+    /// </summary>
+    /// <value>The scene transform data.</value>
+    public SceneTransform Transform { get; } = new();
+
     internal bool IsInitialized { get; private set; }
 
     /// <summary>
