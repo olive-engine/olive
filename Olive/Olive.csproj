@@ -5,10 +5,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageVersion>0.1.1</PackageVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Olive Engine</Title>
         <Authors>Oliver Booth</Authors>
-        <PackageId>OliveEngine</PackageId>
         <Description>An open-source game engine built on top of MonoGame.</Description>
+        <PackageId>OliveEngine</PackageId>
         <PackageProjectUrl>https://github.com/olive-engine/olive/</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/olive-engine/olive/LICENSE.md</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/olive-engine/olive/</RepositoryUrl>
