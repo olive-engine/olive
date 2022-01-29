@@ -362,7 +362,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// <param name="left">The first matrix.</param>
     /// <param name="right">The second matrix.</param>
     /// <returns>The summed matrix.</returns>
-    public static Matrix4x4 operator +(Matrix4x4 left, Matrix4x4 right)
+    public static Matrix4x4 operator +(in Matrix4x4 left, in Matrix4x4 right)
     {
         return new Matrix4x4(
             left.M11 + right.M11,
@@ -390,7 +390,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// <param name="left">The first matrix.</param>
     /// <param name="right">The second matrix.</param>
     /// <returns>The difference matrix.</returns>
-    public static Matrix4x4 operator -(Matrix4x4 left, Matrix4x4 right)
+    public static Matrix4x4 operator -(in Matrix4x4 left, in Matrix4x4 right)
     {
         return new Matrix4x4(
             left.M11 - right.M11,
@@ -418,7 +418,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// <param name="left">The first matrix.</param>
     /// <param name="right">The second matrix.</param>
     /// <returns>The product matrix.</returns>
-    public static Matrix4x4 operator *(Matrix4x4 left, Matrix4x4 right)
+    public static Matrix4x4 operator *(in Matrix4x4 left, in Matrix4x4 right)
     {
         float m11 = left.M11 * right.M11 + left.M12 * right.M21 + left.M13 * right.M31 + left.M14 * right.M41;
         float m12 = left.M11 * right.M12 + left.M12 * right.M22 + left.M13 * right.M32 + left.M14 * right.M42;
@@ -449,7 +449,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// <param name="matrix">The matrix.</param>
     /// <param name="scalar">The scale factor.</param>
     /// <returns>The scaled matrix.</returns>
-    public static Matrix4x4 operator *(Matrix4x4 matrix, float scalar)
+    public static Matrix4x4 operator *(in Matrix4x4 matrix, float scalar)
     {
         return new Matrix4x4(
             matrix.M11 * scalar,
@@ -476,7 +476,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// </summary>
     /// <param name="value">The matrix to negate.</param>
     /// <returns>The negated matrix.</returns>
-    public static Matrix4x4 operator -(Matrix4x4 value)
+    public static Matrix4x4 operator -(in Matrix4x4 value)
     {
         return new Matrix4x4(
             -value.M11,
@@ -504,7 +504,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// <param name="left">The first matrix to compare.</param>
     /// <param name="right">The second matrix to compare.</param>
     /// <returns><see langword="true" /> if the two matrices are equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(Matrix4x4 left, Matrix4x4 right)
+    public static bool operator ==(in Matrix4x4 left, in Matrix4x4 right)
     {
         return left.Equals(right);
     }
@@ -515,7 +515,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// <param name="left">The first matrix to compare.</param>
     /// <param name="right">The second matrix to compare.</param>
     /// <returns><see langword="true" /> if the two matrices are not equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator !=(Matrix4x4 left, Matrix4x4 right)
+    public static bool operator !=(in Matrix4x4 left, in Matrix4x4 right)
     {
         return !left.Equals(right);
     }
@@ -525,7 +525,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// </summary>
     /// <param name="value">The quaternion to convert.</param>
     /// <returns>The converted quaternion.</returns>
-    public static implicit operator Matrix(Matrix4x4 value)
+    public static implicit operator Matrix(in Matrix4x4 value)
     {
         return new Matrix(value.M11, value.M12, value.M13, value.M14,
             value.M21, value.M22, value.M23, value.M24,
@@ -538,7 +538,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// </summary>
     /// <param name="value">The quaternion to convert.</param>
     /// <returns>The converted quaternion.</returns>
-    public static implicit operator Matrix4x4(Matrix value)
+    public static implicit operator Matrix4x4(in Matrix value)
     {
         return new Matrix4x4(value.M11, value.M12, value.M13, value.M14,
             value.M21, value.M22, value.M23, value.M24,
@@ -551,7 +551,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// </summary>
     /// <param name="value">The quaternion to convert.</param>
     /// <returns>The converted quaternion.</returns>
-    public static implicit operator System.Numerics.Matrix4x4(Matrix4x4 value)
+    public static implicit operator System.Numerics.Matrix4x4(in Matrix4x4 value)
     {
         return new System.Numerics.Matrix4x4(value.M11, value.M12, value.M13, value.M14,
             value.M21, value.M22, value.M23, value.M24,
@@ -564,7 +564,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// </summary>
     /// <param name="value">The quaternion to convert.</param>
     /// <returns>The converted quaternion.</returns>
-    public static implicit operator Matrix4x4(System.Numerics.Matrix4x4 value)
+    public static implicit operator Matrix4x4(in System.Numerics.Matrix4x4 value)
     {
         return new Matrix4x4(value.M11, value.M12, value.M13, value.M14,
             value.M21, value.M22, value.M23, value.M24,
@@ -577,7 +577,7 @@ public readonly struct Matrix4x4 : IEquatable<Matrix4x4>
     /// </summary>
     /// <param name="value">The matrix to transpose.</param>
     /// <returns>The transposed matrix.</returns>
-    public static Matrix4x4 Transpose(Matrix4x4 value)
+    public static Matrix4x4 Transpose(in Matrix4x4 value)
     {
         return new Matrix4x4(value.M11, value.M21, value.M31, value.M41,
             value.M12, value.M22, value.M32, value.M42,

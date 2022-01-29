@@ -214,11 +214,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// <returns>
     ///     The quaternion that contains the summed values of <paramref name="left" /> and <paramref name="right" />.
     /// </returns>
-    /// <remarks>
-    ///     The <see cref="op_Addition" /> method defines the operation of the addition operator for <see cref="Quaternion" />
-    ///     objects.
-    /// </remarks>
-    public static Quaternion operator +(Quaternion left, Quaternion right)
+    public static Quaternion operator +(in Quaternion left, in Quaternion right)
     {
         float x = left.X + right.X;
         float y = left.Y + right.Y;
@@ -232,12 +228,10 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="left">The first quaternion.</param>
     /// <param name="right">The second quaternion.</param>
-    /// <returns>The quaternion that contains the summed values of <paramref name="left" /> and <paramref name="right" />.</returns>
-    /// <remarks>
-    ///     The <see cref="op_Subtraction" /> method defines the operation of the subtraction operator for
-    ///     <see cref="Quaternion" /> objects.
-    /// </remarks>
-    public static Quaternion operator -(Quaternion left, Quaternion right)
+    /// <returns>
+    ///     The quaternion that contains the summed values of <paramref name="left" /> and <paramref name="right" />.
+    /// </returns>
+    public static Quaternion operator -(in Quaternion left, in Quaternion right)
     {
         float x = left.X - right.X;
         float y = left.Y - right.Y;
@@ -252,11 +246,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// <param name="left">The dividend.</param>
     /// <param name="right">The divisor.</param>
     /// <returns>The quaternion that results from dividing <paramref name="left" /> by <paramref name="right" />.</returns>
-    /// <remarks>
-    ///     The <see cref="op_Division" /> method defines the operation of the subtraction operator for
-    ///     <see cref="Quaternion" /> objects.
-    /// </remarks>
-    public static Quaternion operator /(Quaternion left, Quaternion right)
+    public static Quaternion operator /(in Quaternion left, in Quaternion right)
     {
         (float q1X, float q1Y, float q1Z, float q1W) = left;
 
@@ -295,11 +285,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// <param name="left">The first quaternion.</param>
     /// <param name="right">The second quaternion.</param>
     /// <returns>The product quaternion.</returns>
-    /// <remarks>
-    ///     The <see cref="op_Multiply(Quaternion, Quaternion)" /> method defines the operation of the multiplication operator for
-    ///     <see cref="Quaternion" /> objects.
-    /// </remarks>
-    public static Quaternion operator *(Quaternion left, Quaternion right)
+    public static Quaternion operator *(in Quaternion left, in Quaternion right)
     {
         (float q1X, float q1Y, float q1Z, float q1W) = left;
         (float q2X, float q2Y, float q2Z, float q2W) = right;
@@ -325,11 +311,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// <param name="quaternion">The source quaternion.</param>
     /// <param name="scalar">The scalar value.</param>
     /// <returns>The scaled quaternion.</returns>
-    /// <remarks>
-    ///     The <see cref="op_Multiply(Quaternion, float)" /> method defines the operation of the multiplication operator for
-    ///     <see cref="Quaternion" /> objects.
-    /// </remarks>
-    public static Quaternion operator *(Quaternion quaternion, float scalar)
+    public static Quaternion operator *(in Quaternion quaternion, float scalar)
     {
         float x = quaternion.X * scalar;
         float y = quaternion.Y * scalar;
@@ -344,11 +326,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="value">The quaternion to negate.</param>
     /// <returns>The negated quaternion.</returns>
-    /// <remarks>
-    ///     The <see cref="op_UnaryNegation" /> method defines the operation of the unary negation operator for
-    ///     <see cref="Quaternion" /> objects.
-    /// </remarks>
-    public static Quaternion operator -(Quaternion value)
+    public static Quaternion operator -(in Quaternion value)
     {
         return Zero - value;
     }
@@ -359,7 +337,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// <param name="left">The first quaternion to compare.</param>
     /// <param name="right">The second quaternion to compare.</param>
     /// <returns><see langword="true" /> if the two quaternions are equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(Quaternion left, Quaternion right)
+    public static bool operator ==(in Quaternion left, in Quaternion right)
     {
         return left.Equals(right);
     }
@@ -370,7 +348,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// <param name="left">The first quaternion to compare.</param>
     /// <param name="right">The second quaternion to compare.</param>
     /// <returns><see langword="true" /> if the two quaternions are not equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator !=(Quaternion left, Quaternion right)
+    public static bool operator !=(in Quaternion left, in Quaternion right)
     {
         return !left.Equals(right);
     }
@@ -380,7 +358,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="value">The quaternion to convert.</param>
     /// <returns>The converted quaternion.</returns>
-    public static implicit operator Microsoft.Xna.Framework.Quaternion(Quaternion value)
+    public static implicit operator Microsoft.Xna.Framework.Quaternion(in Quaternion value)
     {
         return new Microsoft.Xna.Framework.Quaternion(value.X, value.Y, value.Z, value.W);
     }
@@ -390,7 +368,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="value">The quaternion to convert.</param>
     /// <returns>The converted quaternion.</returns>
-    public static implicit operator Quaternion(Microsoft.Xna.Framework.Quaternion value)
+    public static implicit operator Quaternion(in Microsoft.Xna.Framework.Quaternion value)
     {
         return new Quaternion(value.X, value.Y, value.Z, value.W);
     }
@@ -400,7 +378,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="value">The quaternion to convert.</param>
     /// <returns>The converted quaternion.</returns>
-    public static implicit operator System.Numerics.Quaternion(Quaternion value)
+    public static implicit operator System.Numerics.Quaternion(in Quaternion value)
     {
         return new System.Numerics.Quaternion(value.X, value.Y, value.Z, value.W);
     }
@@ -410,7 +388,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="value">The quaternion to convert.</param>
     /// <returns>The converted quaternion.</returns>
-    public static implicit operator Quaternion(System.Numerics.Quaternion value)
+    public static implicit operator Quaternion(in System.Numerics.Quaternion value)
     {
         return new Quaternion(value.X, value.Y, value.Z, value.W);
     }
@@ -425,7 +403,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     ///     <paramref name="axis" /> vector must be normalized before calling this method or the resulting
     ///     <see cref="Quaternion" /> will be incorrect.
     /// </remarks>
-    public static Quaternion AxisAngle(Vector3 axis, float angle)
+    public static Quaternion AxisAngle(in Vector3 axis, float angle)
     {
         float halfAngle = angle * 0.5f;
         float s = MathF.Sin(halfAngle);
@@ -448,7 +426,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     ///     A new quaternion representing the concatenation of the <paramref name="left" /> rotation followed by the
     ///     <paramref name="right" /> rotation.
     /// </returns>
-    public static Quaternion Concatenate(Quaternion left, Quaternion right)
+    public static Quaternion Concatenate(in Quaternion left, in Quaternion right)
     {
         // concatenate rotation is actually q2 * q1 instead of q1 * q2.
         return right * left;
@@ -459,7 +437,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="value">The quaternion.</param>
     /// <returns>A new quaternion that is the conjugate of <see langword="value" />.</returns>
-    public static Quaternion Conjugate(Quaternion value)
+    public static Quaternion Conjugate(in Quaternion value)
     {
         float x = -value.X;
         float y = -value.Y;
@@ -475,7 +453,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// <param name="left">The first quaternion.</param>
     /// <param name="right">The second quaternion.</param>
     /// <returns>The dot product.</returns>
-    public static float Dot(Quaternion left, Quaternion right)
+    public static float Dot(in Quaternion left, in Quaternion right)
     {
         return left.X * right.X +
                left.Y * right.Y +
@@ -519,7 +497,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="euler">The euler angles.</param>
     /// <returns>The resulting quaternion.</returns>
-    public static Quaternion Euler(Vector3 euler)
+    public static Quaternion Euler(in Vector3 euler)
     {
         (float x, float y, float z) = euler;
         return Euler(x, y, z);
@@ -530,7 +508,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="value">The quaternion.</param>
     /// <returns>The inverted quaternion.</returns>
-    public static Quaternion Inverse(Quaternion value)
+    public static Quaternion Inverse(in Quaternion value)
     {
         //  -1   (       a              -v       )
         // q   = ( -------------   ------------- )
@@ -554,7 +532,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// <param name="right">The second quaternion.</param>
     /// <param name="alpha">The relative weight of <paramref name="right" /> in the interpolation.</param>
     /// <returns>The interpolated quaternion.</returns>
-    public static Quaternion Lerp(Quaternion left, Quaternion right, float alpha)
+    public static Quaternion Lerp(in Quaternion left, in Quaternion right, float alpha)
     {
         float oneMinusAlpha = 1.0f - alpha;
         float x, y, z, w;
@@ -594,7 +572,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="matrix">The rotation matrix.</param>
     /// <returns>A quaternion composed from the rotation part of the matrix.</returns>
-    public static Quaternion Matrix(Matrix4x4 matrix)
+    public static Quaternion Matrix(in Matrix4x4 matrix)
     {
         float x, y, w, z;
         float sqrt;
@@ -653,7 +631,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// </summary>
     /// <param name="value">The quaternion to normalize.</param>
     /// <returns>The normalized quaternion.</returns>
-    public static Quaternion Normalize(Quaternion value)
+    public static Quaternion Normalize(in Quaternion value)
     {
         (float x, float y, float z, float w) = value;
         float ls = x * x + y * y + z * z + w * w;
@@ -674,7 +652,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     /// <param name="right">The second quaternion.</param>
     /// <param name="alpha">The relative weight of the second quaternion in the interpolation.</param>
     /// <returns>The interpolated quaternion.</returns>
-    public static Quaternion Slerp(Quaternion left, Quaternion right, float alpha)
+    public static Quaternion Slerp(in Quaternion left, in Quaternion right, float alpha)
     {
         float cosOmega = left.X * right.X + left.Y * right.Y +
                          left.Z * right.Z + left.W * right.W;

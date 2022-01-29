@@ -188,7 +188,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The summed vector.</returns>
-    public static Vector3 operator +(Vector3 left, Vector3 right)
+    public static Vector3 operator +(in Vector3 left, in Vector3 right)
     {
         return new Vector3(
             left.X + right.X,
@@ -203,7 +203,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The difference vector.</returns>
-    public static Vector3 operator -(Vector3 left, Vector3 right)
+    public static Vector3 operator -(in Vector3 left, in Vector3 right)
     {
         return new Vector3(
             left.X - right.X,
@@ -218,7 +218,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The product vector.</returns>
-    public static Vector3 operator *(Vector3 left, Vector3 right)
+    public static Vector3 operator *(in Vector3 left, in Vector3 right)
     {
         return new Vector3(
             left.X * right.X,
@@ -233,7 +233,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The vector value.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector3 operator *(Vector3 left, float right)
+    public static Vector3 operator *(in Vector3 left, float right)
     {
         return new Vector3(
             left.X * right,
@@ -248,7 +248,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The scalar value.</param>
     /// <param name="right">The vector value.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector3 operator *(float left, Vector3 right)
+    public static Vector3 operator *(float left, in Vector3 right)
     {
         return new Vector3(
             left * right.X,
@@ -263,7 +263,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="rotation">The rotation.</param>
     /// <param name="point">The point.</param>
     /// <returns>The rotated point.</returns>
-    public static Vector3 operator *(Quaternion rotation, Vector3 point)
+    public static Vector3 operator *(in Quaternion rotation, in Vector3 point)
     {
         // the internet wrote it, I just handed it in.
         // https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Math/Quaternion.cs
@@ -294,7 +294,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector3 operator /(Vector3 left, Vector3 right)
+    public static Vector3 operator /(in Vector3 left, in Vector3 right)
     {
         return new Vector3(
             left.X / right.X,
@@ -309,7 +309,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The vector value.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector3 operator /(Vector3 left, float right)
+    public static Vector3 operator /(in Vector3 left, float right)
     {
         return new Vector3(
             left.X / right,
@@ -324,7 +324,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The scalar value.</param>
     /// <param name="right">The vector value.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector3 operator /(float left, Vector3 right)
+    public static Vector3 operator /(float left, in Vector3 right)
     {
         return new Vector3(
             left / right.X,
@@ -338,7 +338,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The negated vector.</returns>
-    public static Vector3 operator -(Vector3 value)
+    public static Vector3 operator -(in Vector3 value)
     {
         return Zero - value;
     }
@@ -349,7 +349,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if the two vectors are equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(Vector3 left, Vector3 right)
+    public static bool operator ==(in Vector3 left, in Vector3 right)
     {
         return left.Equals(right);
     }
@@ -360,7 +360,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if the two vectors are not equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator !=(Vector3 left, Vector3 right)
+    public static bool operator !=(in Vector3 left, in Vector3 right)
     {
         return !left.Equals(right);
     }
@@ -372,7 +372,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Vector3(Vector2 value)
+    public static implicit operator Vector3(in Vector2 value)
     {
         return new Vector3(value.X, value.Y, 0);
     }
@@ -382,7 +382,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Microsoft.Xna.Framework.Vector3(Vector3 value)
+    public static implicit operator Microsoft.Xna.Framework.Vector3(in Vector3 value)
     {
         return new Microsoft.Xna.Framework.Vector3(value.X, value.Y, value.Z);
     }
@@ -392,7 +392,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Vector3(Microsoft.Xna.Framework.Vector3 value)
+    public static implicit operator Vector3(in Microsoft.Xna.Framework.Vector3 value)
     {
         return new Vector3(value.X, value.Y, value.Z);
     }
@@ -402,7 +402,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator System.Numerics.Vector3(Vector3 value)
+    public static implicit operator System.Numerics.Vector3(in Vector3 value)
     {
         return new System.Numerics.Vector3(value.X, value.Y, value.Z);
     }
@@ -412,7 +412,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Vector3(System.Numerics.Vector3 value)
+    public static implicit operator Vector3(in System.Numerics.Vector3 value)
     {
         return new Vector3(value.X, value.Y, value.Z);
     }
@@ -422,7 +422,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The absolute value vector.</returns>
-    public static Vector3 Abs(Vector3 value)
+    public static Vector3 Abs(in Vector3 value)
     {
         return new Vector3(
             MathF.Abs(value.X),
@@ -438,7 +438,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="min">The minimum vector</param>
     /// <param name="max">The maximum vector</param>
     /// <returns>The restricted vector.</returns>
-    public static Vector3 Clamp(Vector3 value, Vector3 min, Vector3 max)
+    public static Vector3 Clamp(in Vector3 value, in Vector3 min, in Vector3 max)
     {
         return Min(Max(value, min), max);
     }
@@ -449,7 +449,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The cross product.</returns>
-    public static Vector3 Cross(Vector3 left, Vector3 right)
+    public static Vector3 Cross(in Vector3 left, in Vector3 right)
     {
         return new Vector3(
             left.Y * right.Z - left.Z * right.Y,
@@ -464,7 +464,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first point.</param>
     /// <param name="right">The second point.</param>
     /// <returns>The distance.</returns>
-    public static float Distance(Vector3 left, Vector3 right)
+    public static float Distance(in Vector3 left, in Vector3 right)
     {
         Vector3 difference = left - right;
         float dot = Dot(difference, difference);
@@ -477,7 +477,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first point.</param>
     /// <param name="right">The second point.</param>
     /// <returns>The distance squared.</returns>
-    public static float DistanceSquared(Vector3 left, Vector3 right)
+    public static float DistanceSquared(in Vector3 left, in Vector3 right)
     {
         Vector3 difference = left - right;
         return Dot(difference, difference);
@@ -489,7 +489,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The dot product.</returns>
-    public static float Dot(Vector3 left, Vector3 right)
+    public static float Dot(in Vector3 left, in Vector3 right)
     {
         return left.X * right.X +
                left.Y * right.Y +
@@ -504,7 +504,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="right">The second vector.</param>
     /// <param name="alpha">The relative weight of <paramref name="right" /> in the interpolation.</param>
     /// <returns>The interpolated vector.</returns>
-    public static Vector3 Lerp(Vector3 left, Vector3 right, float alpha)
+    public static Vector3 Lerp(in Vector3 left, in Vector3 right, float alpha)
     {
         Vector3 firstInfluence = left * (1.0f - alpha);
         Vector3 secondInfluence = right * alpha;
@@ -517,7 +517,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The maximized vector.</returns>
-    public static Vector3 Max(Vector3 left, Vector3 right)
+    public static Vector3 Max(in Vector3 left, in Vector3 right)
     {
         return new Vector3(
             MathF.Max(left.X, right.X),
@@ -532,7 +532,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The minimized vector.</returns>
-    public static Vector3 Min(Vector3 left, Vector3 right)
+    public static Vector3 Min(in Vector3 left, in Vector3 right)
     {
         return new Vector3(
             MathF.Min(left.X, right.X),
@@ -546,7 +546,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// </summary>
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
-    public static Vector3 Normalize(Vector3 value)
+    public static Vector3 Normalize(in Vector3 value)
     {
         return value / value.Length;
     }
@@ -557,7 +557,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <param name="vector">The source vector.</param>
     /// <param name="normal">The normal of the surface off of which the vector is being reflected.</param>
     /// <returns>The reflected vector.</returns>
-    public static Vector3 Reflect(Vector3 vector, Vector3 normal)
+    public static Vector3 Reflect(in Vector3 vector, in Vector3 normal)
     {
         float dot = Dot(vector, normal);
         Vector3 temp = normal * dot * 2.0f;
@@ -569,7 +569,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The square root vector.</returns>
-    public static Vector3 SquareRoot(Vector3 value)
+    public static Vector3 SquareRoot(in Vector3 value)
     {
         return new(
             MathF.Sqrt(value.X),

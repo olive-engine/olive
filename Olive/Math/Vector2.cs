@@ -156,7 +156,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The summed vector.</returns>
-    public static Vector2 operator +(Vector2 left, Vector2 right)
+    public static Vector2 operator +(in Vector2 left, in Vector2 right)
     {
         return new Vector2(
             left.X + right.X,
@@ -170,7 +170,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The difference vector.</returns>
-    public static Vector2 operator -(Vector2 left, Vector2 right)
+    public static Vector2 operator -(in Vector2 left, in Vector2 right)
     {
         return new Vector2(
             left.X - right.X,
@@ -184,7 +184,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The product vector.</returns>
-    public static Vector2 operator *(Vector2 left, Vector2 right)
+    public static Vector2 operator *(in Vector2 left, in Vector2 right)
     {
         return new Vector2(
             left.X * right.X,
@@ -198,7 +198,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The vector value.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector2 operator *(Vector2 left, float right)
+    public static Vector2 operator *(in Vector2 left, float right)
     {
         return new Vector2(
             left.X * right,
@@ -212,7 +212,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The scalar value.</param>
     /// <param name="right">The vector value.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector2 operator *(float left, Vector2 right)
+    public static Vector2 operator *(float left, in Vector2 right)
     {
         return new Vector2(
             left * right.X,
@@ -226,7 +226,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector2 operator /(Vector2 left, Vector2 right)
+    public static Vector2 operator /(in Vector2 left, in Vector2 right)
     {
         return new Vector2(
             left.X / right.X,
@@ -240,7 +240,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The vector value.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector2 operator /(Vector2 left, float right)
+    public static Vector2 operator /(in Vector2 left, float right)
     {
         return new Vector2(
             left.X / right,
@@ -254,7 +254,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The scalar value.</param>
     /// <param name="right">The vector value.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector2 operator /(float left, Vector2 right)
+    public static Vector2 operator /(float left, in Vector2 right)
     {
         return new Vector2(
             left / right.X,
@@ -267,7 +267,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The negated vector.</returns>
-    public static Vector2 operator -(Vector2 value)
+    public static Vector2 operator -(in Vector2 value)
     {
         return Zero - value;
     }
@@ -278,7 +278,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if the two vectors are equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(Vector2 left, Vector2 right)
+    public static bool operator ==(in Vector2 left, in Vector2 right)
     {
         return left.Equals(right);
     }
@@ -289,7 +289,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if the two vectors are not equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator !=(Vector2 left, Vector2 right)
+    public static bool operator !=(in Vector2 left, in Vector2 right)
     {
         return !left.Equals(right);
     }
@@ -301,7 +301,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static explicit operator Vector2(Vector3 value)
+    public static explicit operator Vector2(in Vector3 value)
     {
         return new Vector2(value.X, value.Y);
     }
@@ -311,7 +311,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Microsoft.Xna.Framework.Vector2(Vector2 value)
+    public static implicit operator Microsoft.Xna.Framework.Vector2(in Vector2 value)
     {
         return new Microsoft.Xna.Framework.Vector2(value.X, value.Y);
     }
@@ -321,7 +321,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Vector2(Microsoft.Xna.Framework.Vector2 value)
+    public static implicit operator Vector2(in Microsoft.Xna.Framework.Vector2 value)
     {
         return new Vector2(value.X, value.Y);
     }
@@ -331,7 +331,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator System.Numerics.Vector2(Vector2 value)
+    public static implicit operator System.Numerics.Vector2(in Vector2 value)
     {
         return new System.Numerics.Vector2(value.X, value.Y);
     }
@@ -341,7 +341,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Vector2(System.Numerics.Vector2 value)
+    public static implicit operator Vector2(in System.Numerics.Vector2 value)
     {
         return new Vector2(value.X, value.Y);
     }
@@ -351,7 +351,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The absolute value vector.</returns>
-    public static Vector2 Abs(Vector2 value)
+    public static Vector2 Abs(in Vector2 value)
     {
         return new Vector2(
             MathF.Abs(value.X),
@@ -366,7 +366,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="min">The minimum vector</param>
     /// <param name="max">The maximum vector</param>
     /// <returns>The restricted vector.</returns>
-    public static Vector2 Clamp(Vector2 value, Vector2 min, Vector2 max)
+    public static Vector2 Clamp(in Vector2 value, in Vector2 min, in Vector2 max)
     {
         return Min(Max(value, min), max);
     }
@@ -377,7 +377,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first point.</param>
     /// <param name="right">The second point.</param>
     /// <returns>The distance.</returns>
-    public static float Distance(Vector2 left, Vector2 right)
+    public static float Distance(in Vector2 left, in Vector2 right)
     {
         Vector2 difference = left - right;
         float dot = Dot(difference, difference);
@@ -390,7 +390,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first point.</param>
     /// <param name="right">The second point.</param>
     /// <returns>The distance squared.</returns>
-    public static float DistanceSquared(Vector2 left, Vector2 right)
+    public static float DistanceSquared(in Vector2 left, in Vector2 right)
     {
         Vector2 difference = left - right;
         return Dot(difference, difference);
@@ -402,7 +402,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The dot product.</returns>
-    public static float Dot(Vector2 left, Vector2 right)
+    public static float Dot(in Vector2 left, in Vector2 right)
     {
         return left.X * right.X +
                left.Y * right.Y;
@@ -416,7 +416,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="right">The second vector.</param>
     /// <param name="alpha">The relative weight of <paramref name="right" /> in the interpolation.</param>
     /// <returns>The interpolated vector.</returns>
-    public static Vector2 Lerp(Vector2 left, Vector2 right, float alpha)
+    public static Vector2 Lerp(in Vector2 left, in Vector2 right, float alpha)
     {
         Vector2 firstInfluence = left * (1.0f - alpha);
         Vector2 secondInfluence = right * alpha;
@@ -429,7 +429,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The maximized vector.</returns>
-    public static Vector2 Max(Vector2 left, Vector2 right)
+    public static Vector2 Max(in Vector2 left, in Vector2 right)
     {
         return new Vector2(
             MathF.Max(left.X, right.X),
@@ -443,7 +443,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The minimized vector.</returns>
-    public static Vector2 Min(Vector2 left, Vector2 right)
+    public static Vector2 Min(in Vector2 left, in Vector2 right)
     {
         return new Vector2(
             MathF.Min(left.X, right.X),
@@ -456,7 +456,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
-    public static Vector2 Normalize(Vector2 value)
+    public static Vector2 Normalize(in Vector2 value)
     {
         return value / value.Length;
     }
@@ -467,7 +467,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="vector">The source vector.</param>
     /// <param name="normal">The normal of the surface off of which the vector is being reflected.</param>
     /// <returns>The reflected vector.</returns>
-    public static Vector2 Reflect(Vector2 vector, Vector2 normal)
+    public static Vector2 Reflect(in Vector2 vector, in Vector2 normal)
     {
         float dot = Dot(vector, normal);
         Vector2 temp = normal * dot * 2.0f;
@@ -479,7 +479,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The square root vector.</returns>
-    public static Vector2 SquareRoot(Vector2 value)
+    public static Vector2 SquareRoot(in Vector2 value)
     {
         return new(
             MathF.Sqrt(value.X),
