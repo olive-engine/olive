@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Olive.Rendering;
 
@@ -26,7 +26,7 @@ public abstract class Scene
     ///     Gets a read-only view of the game objects currently in the scene.
     /// </summary>
     /// <value>A read-only view of the game objects currently in the scene.</value>
-    public IReadOnlyCollection<GameObject> GameObjects => _gameObjects.AsReadOnly();
+    public IReadOnlyCollection<GameObject> GameObjects => _gameObjects.Where(g => !g.IsDisposed).ToArray();
 
     /// <summary>
     ///     Gets or sets the main camera of this scene.
