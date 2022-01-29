@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections;
+using Microsoft.Xna.Framework;
 using Olive.Math;
 using Vector3 = Olive.Math.Vector3;
 using Quaternion = Olive.Math.Quaternion;
@@ -6,14 +7,27 @@ using Quaternion = Olive.Math.Quaternion;
 namespace Olive;
 
 /// <summary>
-///     Represents a component which is attached to all gameobjects by default, providing them with transform data.
+///     Represents a component which is attached to all game objects by default, providing them with transform data.
 /// </summary>
-public class Transform : Component
+public sealed class Transform : Component, IEnumerable<Transform>
 {
+    private readonly List<Transform> _children = new();
     private Transform? _parent;
     private Vector3 _localPosition = Vector3.Zero;
     private Quaternion _localRotation = Quaternion.Identity;
     private Vector3 _localScale = Vector3.One;
+
+    /// <summary>
+    ///     Gets the amount of children to this transform.
+    /// </summary>
+    /// <value>The amount of children to this transform.</value>
+    public int ChildCount => _children.Count;
+
+    /// <summary>
+    ///     Gets a read-only view of the children of this transform.
+    /// </summary>
+    /// <value>A read-only view of the children.</value>
+    public IReadOnlyList<Transform> Children => _children.AsReadOnly();
 
     /// <summary>
     ///     Gets the world-space rotation of this object, as represented by Euler angles.
@@ -61,6 +75,11 @@ public class Transform : Component
         {
             OliveEngine.AssertNonDisposed(this);
 
+            if (value is null && _parent is not null)
+            {
+                _parent._children.Remove(this);
+            }
+
             if (value is not null)
             {
                 OliveEngine.AssertNonDisposed(value);
@@ -83,6 +102,7 @@ public class Transform : Component
             }
 
             _parent = value;
+            _parent?._children.Add(this);
         }
     }
 
@@ -389,5 +409,15 @@ public class Transform : Component
                * Matrix.CreateFromQuaternion(Rotation)
                * Matrix.CreateScale(Scale)
                * worldMatrix;
+    }
+
+    public IEnumerator<Transform> GetEnumerator()
+    {
+        return _children.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return ((IEnumerable) _children).GetEnumerator();
     }
 }
