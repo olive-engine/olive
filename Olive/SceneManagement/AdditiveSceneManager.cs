@@ -34,6 +34,11 @@ public sealed class AdditiveSceneManager : SceneManager
 
     protected internal override void Draw(GameTime gameTime)
     {
+        if (Camera.Main is { } camera)
+        {
+            OliveEngine.CurrentGame!.GraphicsDevice.Clear(camera.ClearColor);
+        }
+
         var hasDrawn = false;
         foreach (Scene scene in _scenes.ToArray())
         {
@@ -53,11 +58,16 @@ public sealed class AdditiveSceneManager : SceneManager
     {
         base.Initialize();
 
+        Camera? mainCamera = Camera.Main;
         foreach (Scene scene in _scenes.ToArray())
         {
             if (!scene.IsInitialized)
             {
                 scene.Initialize();
+                if (scene.MainCamera is null or {IsDisposed: true})
+                {
+                    Camera.Main = mainCamera;
+                }
             }
         }
     }

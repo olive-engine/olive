@@ -19,7 +19,7 @@ public sealed class Camera : Component
     ///     Gets the main camera.
     /// </summary>
     /// <value>The main camera.</value>
-    public static Camera? Main { get; internal set; }
+    public static Camera? Main { get; set; }
 
     /// <summary>
     ///     Gets or sets the camera's clear color.
