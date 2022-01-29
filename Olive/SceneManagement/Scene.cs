@@ -96,13 +96,7 @@ public abstract class Scene
     /// <returns>The loaded asset.</returns>
     public T LoadContent<T>(string assetName)
     {
-        if (OliveEngine.CurrentGame is { } game)
-        {
-            return game.Content.Load<T>(assetName);
-        }
-
-        Trace.Assert(false, "Impossible state. Game is null."); // if we're here, something is horrendously fucked.
-        return default!;
+        return OliveEngine.CurrentGame.Content.Load<T>(assetName);
     }
 
     protected internal virtual void LoadContent()
@@ -146,7 +140,7 @@ public abstract class Scene
             return null;
         }
 
-        if (OliveEngine.CurrentGame?.GraphicsDevice is not { } graphicsDevice)
+        if (OliveEngine.CurrentGame.GraphicsDevice is not { } graphicsDevice)
         {
             return false;
         }

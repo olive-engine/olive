@@ -11,7 +11,7 @@ public static class OliveEngine
     private static bool s_isInitialized;
     private static Thread? _gameThread;
 
-    internal static OliveGame? CurrentGame { get; private set; }
+    internal static OliveGame CurrentGame { get; private set; } = null!;
 
     /// <summary>
     ///     Initializes the game engine.
