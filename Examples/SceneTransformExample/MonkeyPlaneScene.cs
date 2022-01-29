@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Olive;
+using Olive.Math;
 using Olive.Rendering;
 using Olive.SceneManagement;
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace SceneTransformExample;
 

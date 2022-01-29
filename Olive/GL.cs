@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Olive.Math;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace Olive;
 

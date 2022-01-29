@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 using Olive;
+using Olive.Math;
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace BehaviorExample.FirstPersonMovement;
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Vector3 = Olive.Math.Vector3;
 
 namespace Olive.Rendering;
 

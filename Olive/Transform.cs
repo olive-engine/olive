@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Olive.Extensions;
+using Olive.Math;
+using Vector3 = Olive.Math.Vector3;
+using Quaternion = Olive.Math.Quaternion;
 
 namespace Olive;
 
@@ -22,12 +24,12 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-            return Rotation.ToEulerAngles();
+            return Rotation.EulerAngles;
         }
         set
         {
             OliveEngine.AssertNonDisposed(this);
-            Rotation = value.ToQuaternion();
+            Rotation = Quaternion.Euler(value);
         }
     }
 
@@ -40,7 +42,7 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-            return Rotation.Multiply(Vector3.Forward);
+            return Rotation * Vector3.Forward;
         }
     }
 
@@ -93,12 +95,12 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-            return LocalRotation.ToEulerAngles();
+            return LocalRotation.EulerAngles;
         }
         set
         {
             OliveEngine.AssertNonDisposed(this);
-            LocalRotation = value.ToQuaternion();
+            LocalRotation = Quaternion.Euler(value);
         }
     }
 
@@ -190,7 +192,7 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-            return Rotation.Multiply(Vector3.Right);
+            return Rotation * Vector3.Right;
         }
     }
 
@@ -253,7 +255,7 @@ public class Transform : Component
         get
         {
             OliveEngine.AssertNonDisposed(this);
-            return Rotation.Multiply(Vector3.Up);
+            return Rotation * Vector3.Up;
         }
     }
 
@@ -298,11 +300,11 @@ public class Transform : Component
         // https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function
 
         Vector3 from = Position;
-        Vector3 forward = (from - position).Normalized();
+        Vector3 forward = Vector3.Normalize(from - position);
         Vector3 right = Vector3.Cross(up, forward);
         up = Vector3.Cross(forward, right);
 
-        var camToWorld = new Matrix
+        var camToWorld = new Matrix4x4
         {
             [0, 0] = right.X,
             [0, 1] = right.Y,
@@ -318,7 +320,7 @@ public class Transform : Component
             [3, 2] = from.Z
         };
 
-        Rotation = Quaternion.CreateFromRotationMatrix(camToWorld);
+        Rotation = Quaternion.Matrix(camToWorld);
     }
 
     /// <summary>
@@ -348,7 +350,7 @@ public class Transform : Component
     public void Rotate(Vector3 rotation)
     {
         OliveEngine.AssertNonDisposed(this);
-        Rotation *= rotation.ToQuaternion();
+        Rotation *= Quaternion.Euler(rotation);
     }
 
     /// <summary>
@@ -360,7 +362,7 @@ public class Transform : Component
     {
         OliveEngine.AssertNonDisposed(this);
         angle = MathHelper.ToRadians(angle);
-        Rotation *= Quaternion.CreateFromAxisAngle(axis, angle);
+        Rotation *= Quaternion.AxisAngle(axis, angle);
     }
 
     /// <summary>
@@ -372,10 +374,10 @@ public class Transform : Component
     public void RotateAround(Vector3 point, Vector3 axis, float angle)
     {
         OliveEngine.AssertNonDisposed(this);
-        var rotation = Quaternion.CreateFromAxisAngle(axis, angle);
+        var rotation = Quaternion.AxisAngle(axis, angle);
         Vector3 position = Position;
         Vector3 offset = position - point;
-        offset = rotation.Multiply(offset);
+        offset = rotation * offset;
         position = point + offset;
         Position = position;
     }

@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Olive;
+﻿using Olive;
+using Olive.Math;
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace BehaviorExample;
 

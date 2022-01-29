@@ -1,10 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Olive.Extensions;
+﻿using Olive.Math;
 
 namespace Olive;
 
 /// <summary>
-///     Represents a box. Similar to <see cref="BoundingBox" /> except that this struct is primarily used for
+///     Represents a box. Similar to <see cref="Microsoft.Xna.Framework.BoundingBox" /> except that this struct is primarily used for
 ///     <see cref="GL.DrawBox(Box, Color)" />.
 /// </summary>
 public readonly struct Box
@@ -54,14 +53,13 @@ public readonly struct Box
 
     public static Vector3 CastCenterOnCollision(Vector3 origin, Vector3 direction, float hitInfoDistance)
     {
-        direction.Normalize();
-        return origin + direction * hitInfoDistance;
+        return origin + Vector3.Normalize(direction) * hitInfoDistance;
     }
 
     private static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rotation)
     {
         Vector3 direction = point - pivot;
-        return pivot + rotation.Multiply(direction);
+        return pivot + rotation * direction;
     }
 
     private static void Rotate(Quaternion orientation, ref Vector3 localFrontTopLeft, ref Vector3 localFrontTopRight,

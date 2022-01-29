@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Olive;
+﻿using Olive;
+using Olive.Math;
 using Olive.SceneManagement;
 
 namespace SceneTransformExample;

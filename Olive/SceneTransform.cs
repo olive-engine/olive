@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Olive.Extensions;
+using Olive.Math;
 using Olive.SceneManagement;
+using Vector3 = Olive.Math.Vector3;
+using Quaternion = Olive.Math.Quaternion;
 
 namespace Olive;
 
@@ -15,8 +17,8 @@ public sealed class SceneTransform
     /// <value>The rotation of the scene, as represented by Euler angles.</value>
     public Vector3 EulerAngles
     {
-        get => Rotation.ToEulerAngles();
-        set => Rotation = value.ToQuaternion();
+        get => Rotation.EulerAngles;
+        set => Rotation = Quaternion.Euler(value);
     }
 
     /// <summary>
@@ -65,11 +67,11 @@ public sealed class SceneTransform
         // https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function
 
         Vector3 from = Position;
-        Vector3 forward = (from - position).Normalized();
+        Vector3 forward = Vector3.Normalize(from - position);
         Vector3 right = Vector3.Cross(up, forward);
         up = Vector3.Cross(forward, right);
 
-        var camToWorld = new Matrix
+        var camToWorld = new Matrix4x4
         {
             [0, 0] = right.X,
             [0, 1] = right.Y,
@@ -85,7 +87,7 @@ public sealed class SceneTransform
             [3, 2] = from.Z
         };
 
-        Rotation = Quaternion.CreateFromRotationMatrix(camToWorld);
+        Rotation = Quaternion.Matrix(camToWorld);
     }
 
     /// <summary>
@@ -112,7 +114,7 @@ public sealed class SceneTransform
     /// <param name="rotation">The world-space rotation.</param>
     public void Rotate(Vector3 rotation)
     {
-        Rotation *= rotation.ToQuaternion();
+        Rotation *= Quaternion.Euler(rotation);
     }
 
     /// <summary>
@@ -123,7 +125,7 @@ public sealed class SceneTransform
     public void Rotate(Vector3 axis, float angle)
     {
         angle = MathHelper.ToRadians(angle);
-        Rotation *= Quaternion.CreateFromAxisAngle(axis, angle);
+        Rotation *= Quaternion.AxisAngle(axis, angle);
     }
 
     /// <summary>
@@ -134,10 +136,10 @@ public sealed class SceneTransform
     /// <param name="angle">The angle in degrees.</param>
     public void RotateAround(Vector3 point, Vector3 axis, float angle)
     {
-        var rotation = Quaternion.CreateFromAxisAngle(axis, angle);
+        var rotation = Quaternion.AxisAngle(axis, angle);
         Vector3 position = Position;
         Vector3 offset = position - point;
-        offset = rotation.Multiply(offset);
+        offset = rotation * offset;
         position = point + offset;
         Position = position;
     }

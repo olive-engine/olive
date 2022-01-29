@@ -1,7 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using Olive;
+﻿using Olive;
+using Olive.Math;
 using Olive.SceneManagement;
-using DisplayMode = Olive.DisplayMode;
+using Color = Microsoft.Xna.Framework.Color;
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 OliveEngine.Initialize("GL Example", 800, 600, DisplayMode.Windowed);
 OliveEngine.Run();
