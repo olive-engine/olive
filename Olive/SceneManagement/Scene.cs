@@ -103,18 +103,38 @@ public abstract class Scene
 
     internal bool Draw(GameTime gameTime)
     {
+        Camera? FindMainCamera()
+        {
+            Camera? camera = Camera.Main;
+            if (camera is not null && !camera.IsDisposed)
+            {
+                return camera;
+            }
+
+            for (var index = 0; index < _gameObjects.Count; index++)
+            {
+                GameObject gameObject = _gameObjects[index];
+                if (gameObject.IsDisposed || !gameObject.ActiveInHierarchy)
+                {
+                    continue;
+                }
+
+                if (gameObject.TryGetComponent(out camera))
+                {
+                    return camera;
+                }
+            }
+
+            return null;
+        }
+
         if (OliveEngine.CurrentGame?.GraphicsDevice is not { } graphicsDevice)
         {
             return false;
         }
 
-        if (Camera.Main is not { } camera)
-        {
-            camera = _gameObjects.FirstOrDefault(g => !g.IsDisposed && g.ActiveInHierarchy && g.TryGetComponent(out Camera? _))
-                ?.GetComponent<Camera>();
-        }
-
-        if (camera is null || camera.IsDisposed)
+        Camera? camera = FindMainCamera();
+        if (camera is null or {IsDisposed: true})
         {
             return false;
         }
@@ -123,10 +143,9 @@ public abstract class Scene
         Matrix view = camera.GetViewMatrix();
         Matrix projection = camera.GetProjectionMatrix(graphicsDevice);
 
-        graphicsDevice.Clear(camera.ClearColor);
         foreach (GameObject gameObject in _gameObjects)
         {
-            if (gameObject.TryGetComponent(out Renderer? renderer))
+            if (!gameObject.IsDisposed && gameObject.TryGetComponent(out Renderer? renderer))
             {
                 renderer.Render(gameTime, world, view, projection);
             }
