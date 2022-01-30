@@ -163,26 +163,26 @@ public readonly struct Color : IEquatable<Color>, IFormattable
         switch (colorFormat)
         {
             case ColorFormat.ARGB32:
-                A = (byte) (packedValue & 0xFF000000);
-                R = (byte) (packedValue & 0xFF0000);
-                G = (byte) (packedValue & 0xFF00);
+                A = (byte) ((packedValue & 0xFF000000) >> 24);
+                R = (byte) ((packedValue & 0xFF0000) >> 16);
+                G = (byte) ((packedValue & 0xFF00) >> 8);
                 B = (byte) (packedValue & 0xFF);
                 break;
             case ColorFormat.RGBA32:
-                R = (byte) (packedValue & 0xFF000000);
-                G = (byte) (packedValue & 0xFF0000);
-                B = (byte) (packedValue & 0xFF00);
+                R = (byte) ((packedValue & 0xFF000000) >> 24);
+                G = (byte) ((packedValue & 0xFF0000) >> 16);
+                B = (byte) ((packedValue & 0xFF00) >> 8);
                 A = (byte) (packedValue & 0xFF);
                 break;
             case ColorFormat.ABGR32:
-                A = (byte) (packedValue & 0xFF000000);
-                B = (byte) (packedValue & 0xFF0000);
-                G = (byte) (packedValue & 0xFF00);
+                A = (byte) ((packedValue & 0xFF000000) >> 24);
+                B = (byte) ((packedValue & 0xFF0000) >> 16);
+                G = (byte) ((packedValue & 0xFF00) >> 8);
                 R = (byte) (packedValue & 0xFF);
                 break;
             case ColorFormat.RGB24:
-                R = (byte) (packedValue & 0xFF0000);
-                G = (byte) (packedValue & 0xFF00);
+                R = (byte) ((packedValue & 0xFF0000) >> 16);
+                G = (byte) ((packedValue & 0xFF00) >> 8);
                 B = (byte) (packedValue & 0xFF);
                 A = 255;
                 break;
