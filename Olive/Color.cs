@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 
 namespace Olive;
@@ -176,8 +176,8 @@ public readonly struct Color : IEquatable<Color>, IFormattable
                 break;
             case ColorFormat.ABGR32:
                 A = (byte) (packedValue & 0xFF000000);
-                G = (byte) (packedValue & 0xFF0000);
-                B = (byte) (packedValue & 0xFF00);
+                B = (byte) (packedValue & 0xFF0000);
+                G = (byte) (packedValue & 0xFF00);
                 R = (byte) (packedValue & 0xFF);
                 break;
             case ColorFormat.RGB24:
