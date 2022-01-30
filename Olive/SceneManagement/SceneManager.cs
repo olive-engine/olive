@@ -1,5 +1,3 @@
-﻿using Microsoft.Xna.Framework;
-
 namespace Olive.SceneManagement;
 
 /// <summary>
@@ -7,13 +5,13 @@ namespace Olive.SceneManagement;
 /// </summary>
 public static class SceneManager
 {
-    private static readonly List<Scene> _loadedScenes = new();
+    private static readonly List<Scene> InternalLoadedScenes = new();
 
     /// <summary>
     ///     Gets a read-only view of the loaded scenes.
     /// </summary>
     /// <value>A read-only view of the loaded scenes.</value>
-    public static IReadOnlyList<Scene> LoadedScenes => _loadedScenes.AsReadOnly();
+    public static IReadOnlyList<Scene> LoadedScenes => InternalLoadedScenes.AsReadOnly();
 
     /// <summary>
     ///     Returns a value indicating whether the specified scene has been loaded.
@@ -24,7 +22,7 @@ public static class SceneManager
     /// </returns>
     public static bool IsSceneLoaded(Scene scene)
     {
-        return _loadedScenes.Contains(scene);
+        return InternalLoadedScenes.Contains(scene);
     }
 
     /// <summary>
@@ -34,21 +32,25 @@ public static class SceneManager
     /// <param name="sceneLoadMode">The scene load mode. Defaults to <see cref="SceneLoadMode.Single" />.</param>
     public static void LoadScene(Scene scene, SceneLoadMode sceneLoadMode = SceneLoadMode.Single)
     {
-        if (_loadedScenes.Contains(scene))
+        if (InternalLoadedScenes.Contains(scene))
         {
             throw new InvalidOperationException($"Cannot load scene '{scene.Name}': Scene already loaded");
         }
 
         if (sceneLoadMode == SceneLoadMode.Single)
         {
-            for (int index = _loadedScenes.Count - 1; index >= 0; index--) // enumerator alloc is wasteful
+            for (int index = InternalLoadedScenes.Count - 1; index >= 0; index--) // enumerator alloc is wasteful
             {
-                UnloadScene(_loadedScenes[index]);
+                UnloadScene(InternalLoadedScenes[index]);
             }
         }
 
-        _loadedScenes.Add(scene);
-        scene.Initialize();
+        InternalLoadedScenes.Add(scene);
+
+        if (!scene.IsInitialized)
+        {
+            scene.Initialize();
+        }
     }
 
     /// <summary>
@@ -56,7 +58,7 @@ public static class SceneManager
     /// </summary>
     public static void PopScene()
     {
-        UnloadScene(_loadedScenes[^1]);
+        UnloadScene(InternalLoadedScenes[^1]);
     }
 
     /// <summary>
@@ -70,6 +72,6 @@ public static class SceneManager
             throw new InvalidOperationException($"Cannot unload scene '{scene.Name}': Scene not loaded");
         }
 
-        _loadedScenes.Remove(scene);
+        InternalLoadedScenes.Remove(scene);
     }
 }
