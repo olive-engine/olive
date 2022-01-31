@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using SkiaSharp;
 
@@ -472,18 +472,18 @@ public readonly struct Color : IEquatable<Color>, IFormattable
     {
         var builder = new StringBuilder();
         string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
-        builder.Append('<');
+        builder.Append("(R: ");
         builder.Append(R.ToString(format, formatProvider));
         builder.Append(separator);
-        builder.Append(' ');
+        builder.Append(" G: ");
         builder.Append(G.ToString(format, formatProvider));
         builder.Append(separator);
-        builder.Append(' ');
+        builder.Append(" B: ");
         builder.Append(B.ToString(format, formatProvider));
         builder.Append(separator);
-        builder.Append(' ');
+        builder.Append(" A: ");
         builder.Append(A.ToString(format, formatProvider));
-        builder.Append('>');
+        builder.Append(')');
         return builder.ToString();
     }
 }
