@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using SkiaSharp;
 
 namespace Olive;
 
@@ -356,6 +357,26 @@ public readonly struct Color : IEquatable<Color>, IFormattable
     public static implicit operator Color(in System.Drawing.Color value)
     {
         return new Color((uint) value.ToArgb(), ColorFormat.ARGB32);
+    }
+
+    /// <summary>
+    ///     Implicitly converts from <see cref="Color" /> to <see cref="SKColor" />.
+    /// </summary>
+    /// <param name="value">The color to convert.</param>
+    /// <returns>The converted color.</returns>
+    public static implicit operator SKColor(in Color value)
+    {
+        return new SKColor(value.ToPackedValue(ColorFormat.ARGB32));
+    }
+
+    /// <summary>
+    ///     Implicitly converts from <see cref="SKColor" /> to <see cref="Color" />.
+    /// </summary>
+    /// <param name="value">The color to convert.</param>
+    /// <returns>The converted color.</returns>
+    public static implicit operator Color(in SKColor value)
+    {
+        return new Color((uint)value, ColorFormat.ARGB32);
     }
 
     /// <summary>
