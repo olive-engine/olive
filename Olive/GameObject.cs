@@ -101,7 +101,7 @@ public sealed class GameObject : IDisposable
             AssertNonDisposed();
             return _owningScene;
         }
-    };
+    }
 
     /// <summary>
     ///     Gets a read-only view of the tags this game object has.
