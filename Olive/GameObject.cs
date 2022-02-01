@@ -12,6 +12,7 @@ public sealed class GameObject : IDisposable
 {
     private readonly List<Coroutine> _coroutines = new();
     private readonly List<Component> _components = new();
+    private readonly List<string> _tags = new();
     private Transform? _transform; // lazy load of Transform component
     private string _name;
     private bool _activeSelf = true;
@@ -93,6 +94,12 @@ public sealed class GameObject : IDisposable
     /// </summary>
     /// <value>The scene which owns this game object.</value>
     public Scene OwningScene { get; }
+
+    /// <summary>
+    ///     Gets a read-only view of the tags this game object has.
+    /// </summary>
+    /// <value>A read-only view of the tags.</value>
+    public IReadOnlyList<string> Tags => _tags.AsReadOnly();
 
     /// <summary>
     ///     Gets the transform component attached to this game object.
@@ -195,6 +202,18 @@ public sealed class GameObject : IDisposable
     }
 
     /// <summary>
+    ///     Adds a specified tag to this game object.
+    /// </summary>
+    /// <remarks>If this game object is already tagged with <paramref name="tag" />, nothing happens.</remarks>
+    public void AddTag(string tag)
+    {
+        if (!HasTag(tag))
+        {
+            _tags.Add(tag);
+        }
+    }
+
+    /// <summary>
     ///     Gets the specified component.
     /// </summary>
     /// <typeparam name="T">The component type.</typeparam>
@@ -224,6 +243,32 @@ public sealed class GameObject : IDisposable
     public T[] GetComponents<T>()
     {
         return EnumerateComponents<T>().ToArray();
+    }
+
+    /// <summary>
+    ///     Returns a value indicating whether or not this game object has a specified tag.
+    /// </summary>
+    /// <param name="tag">The tag to check.</param>
+    /// <returns>
+    ///     <see langword="true" /> if this game object is tagged with <paramref name="tag" />; otherwise,
+    ///     <see langword="false" />.
+    /// </returns>
+    public bool HasTag(string tag)
+    {
+        return _tags.Contains(tag);
+    }
+
+    /// <summary>
+    ///     Removes a specified tag from this game object.
+    /// </summary>
+    /// <param name="tag">The tag to remove.</param>
+    /// <remarks>If this game object is not currently tagged with <paramref name="tag" />, nothing happens.</remarks>
+    public void RemoveTag(string tag)
+    {
+        if (HasTag(tag))
+        {
+            _tags.Remove(tag);
+        }
     }
 
     /// <summary>
