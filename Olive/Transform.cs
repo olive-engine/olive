@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using Microsoft.Xna.Framework;
 using Olive.Math;
 using Vector3 = Olive.Math.Vector3;
@@ -75,9 +75,9 @@ public sealed class Transform : Component, IEnumerable<Transform>
         {
             OliveEngine.AssertNonDisposed(this);
 
-            if (value != _parent && _parent is not null)
+            if (value != _parent)
             {
-                _parent._children.Remove(this);
+                _parent?._children.Remove(this);
             }
 
             if (value is not null)
