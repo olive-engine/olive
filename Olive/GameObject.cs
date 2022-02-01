@@ -54,7 +54,7 @@ public sealed class GameObject : IDisposable
     }
 
     /// <summary>
-    ///     Gets a value indicating whether this game object is active.
+    ///     Gets or sets a value indicating whether this game object is active.
     /// </summary>
     /// <value><see langword="true" /> if this game object is active, otherwise <see langword="false" />.</value>
     public bool ActiveSelf
@@ -63,6 +63,11 @@ public sealed class GameObject : IDisposable
         {
             AssertNonDisposed();
             return _activeSelf;
+        }
+        set
+        {
+            AssertNonDisposed();
+            _activeSelf = value;
         }
     }
 
@@ -284,16 +289,6 @@ public sealed class GameObject : IDisposable
         {
             _tags.Remove(tag);
         }
-    }
-
-    /// <summary>
-    ///     Sets whether or not this game object is active.
-    /// </summary>
-    /// <param name="active"><see langword="true" /> if this game object should be activated, otherwise <see langword="false" />.</param>
-    public void SetActive(bool active)
-    {
-        AssertNonDisposed();
-        _activeSelf = active;
     }
 
     /// <summary>
