@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Drawing;
+using System.Globalization;
 using System.Text;
 
 namespace Olive.Math;
@@ -344,6 +345,46 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     public static implicit operator Vector2(in System.Numerics.Vector2 value)
     {
         return new Vector2(value.X, value.Y);
+    }
+
+    /// <summary>
+    ///     Implicitly converts from <see cref="Vector2" /> to <see cref="Size" />.
+    /// </summary>
+    /// <param name="value">The vector to convert.</param>
+    /// <returns>The converted result, as a <see cref="Size" />.</returns>
+    public static explicit operator Size(in Vector2 value)
+    {
+        return new Size((int) value.X, (int) value.Y);
+    }
+
+    /// <summary>
+    ///     Implicitly converts from <see cref="Size" /> to <see cref="Vector2" />.
+    /// </summary>
+    /// <param name="value">The size to convert.</param>
+    /// <returns>The converted result, as a <see cref="Vector2" />.</returns>
+    public static implicit operator Vector2(in Size value)
+    {
+        return new Vector2(value.Width, value.Height);
+    }
+
+    /// <summary>
+    ///     Implicitly converts from <see cref="Vector2" /> to <see cref="SizeF" />.
+    /// </summary>
+    /// <param name="value">The vector to convert.</param>
+    /// <returns>The converted result, as a <see cref="SizeF" />.</returns>
+    public static implicit operator SizeF(in Vector2 value)
+    {
+        return new SizeF(value.X, value.Y);
+    }
+
+    /// <summary>
+    ///     Implicitly converts from <see cref="SizeF" /> to <see cref="Vector2" />.
+    /// </summary>
+    /// <param name="value">The size to convert.</param>
+    /// <returns>The converted result, as a <see cref="Vector2" />.</returns>
+    public static implicit operator Vector2(in SizeF value)
+    {
+        return new Vector2(value.Width, value.Height);
     }
 
     /// <summary>
