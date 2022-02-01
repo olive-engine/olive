@@ -1,6 +1,4 @@
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
-using Olive.Rendering;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Olive.SceneManagement;
 
@@ -45,6 +43,62 @@ public abstract class Scene
     public SceneTransform Transform { get; } = new();
 
     internal bool IsInitialized { get; private set; }
+
+    /// <summary>
+    ///     Enumerates the scene hierarchy, returning game objects who have no parents - that is, game objects which are parented
+    ///     to the scene root.
+    /// </summary>
+    /// <returns>An enumerable of <see cref="GameObject" /> instances.</returns>
+    public IEnumerable<GameObject> EnumerateTopLevelGameObjects()
+    {
+        return _gameObjects.Where(g => g.Transform.Parent is null);
+    }
+
+    /// <summary>
+    ///     Enumerates the scene hierarchy, returning game objects in the order that they appear relative to their parents.
+    /// </summary>
+    /// <returns>An enumerable of <see cref="GameObject" /> instances.</returns>
+    public IEnumerable<GameObject> EnumerateSceneHierarchy()
+    {
+        var stack = new Stack<GameObject>(EnumerateTopLevelGameObjects());
+
+        while (stack.Count > 0)
+        {
+            GameObject current = stack.Pop();
+            yield return current;
+
+            IReadOnlyList<Transform> children = current.Transform.Children;
+            for (var childIndex = 0; childIndex < children.Count; childIndex++)
+            {
+                stack.Push(children[childIndex].GameObject);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Attempts to find a game object in this scene whose name matches a specified value.
+    /// </summary>
+    /// <param name="name">The name of the game object to find.</param>
+    /// <param name="gameObject">
+    ///     The game object whose <see cref="GameObject.Name" /> matches <paramref name="name" />, or <see langword="null" /> if
+    ///     no match was found.
+    /// </param>
+    /// <returns><see langword="true" /> if the game object was found; otherwise, <see langword="false" />.</returns>
+    public bool TryFindGameObjectWithName(string name, [NotNullWhen(true)] out GameObject? gameObject)
+    {
+        gameObject = null;
+
+        foreach (GameObject current in EnumerateSceneHierarchy())
+        {
+            if (current.Name == name)
+            {
+                gameObject = current;
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /// <summary>
     ///     Called when the scene is being initialized.
