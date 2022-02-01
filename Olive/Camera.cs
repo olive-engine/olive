@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Olive.SceneManagement;
 using Vector3 = Olive.Math.Vector3;
 
 namespace Olive;
@@ -9,6 +10,8 @@ namespace Olive;
 /// </summary>
 public sealed class Camera : Component
 {
+    internal const string MainCameraTag = "MainCamera";
+
     private Color _clearColor = Color.CornflowerBlue;
     private float _farPlane = 1000f;
     private float _fieldOfView = 90f;
@@ -17,10 +20,61 @@ public sealed class Camera : Component
     private float _orthographicSize = 1f;
 
     /// <summary>
+    ///     Gets the current camera.
+    /// </summary>
+    /// <value>The current camera.</value>
+    public static Camera? Current
+    {
+        get
+        {
+            Camera? firstCamera = null;
+
+            for (var index = 0; index < SceneManager.LoadedScenes.Count; index++)
+            {
+                Scene loadedScene = SceneManager.LoadedScenes[index];
+                foreach (GameObject gameObject in loadedScene.EnumerateSceneHierarchy())
+                {
+                    if (!gameObject.TryGetComponent(out Camera? camera))
+                    {
+                        continue;
+                    }
+
+                    if (gameObject.HasTag(MainCameraTag))
+                    {
+                        return camera;
+                    }
+
+                    firstCamera ??= camera;
+                }
+            }
+
+            return firstCamera;
+        }
+    }
+
+    /// <summary>
     ///     Gets the main camera.
     /// </summary>
     /// <value>The main camera.</value>
-    public static Camera? Main { get; set; }
+    public static Camera? Main
+    {
+        get
+        {
+            for (var index = 0; index < SceneManager.LoadedScenes.Count; index++)
+            {
+                Scene loadedScene = SceneManager.LoadedScenes[index];
+                foreach (GameObject gameObject in loadedScene.EnumerateSceneHierarchy())
+                {
+                    if (gameObject.HasTag(MainCameraTag) && gameObject.TryGetComponent(out Camera? camera))
+                    {
+                        return camera;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
 
     /// <summary>
     ///     Gets or sets the camera's clear color.
