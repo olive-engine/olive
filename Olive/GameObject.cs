@@ -13,6 +13,7 @@ public sealed class GameObject : IDisposable
     private readonly List<Coroutine> _coroutines = new();
     private readonly List<Component> _components = new();
     private readonly List<string> _tags = new();
+    private readonly Scene _owningScene;
     private Transform? _transform; // lazy load of Transform component
     private string _name;
     private bool _activeSelf = true;
@@ -24,7 +25,7 @@ public sealed class GameObject : IDisposable
     /// <exception cref="ArgumentNullException"><paramref name="owningScene" /> is <see langword="null" />.</exception>
     public GameObject(Scene owningScene)
     {
-        OwningScene = owningScene ?? throw new ArgumentNullException(nameof(owningScene));
+        _owningScene = owningScene ?? throw new ArgumentNullException(nameof(owningScene));
         owningScene.AddGameObject(this);
         AddComponent<Transform>();
     }
@@ -93,13 +94,27 @@ public sealed class GameObject : IDisposable
     ///     Gets the scene which owns this game object.
     /// </summary>
     /// <value>The scene which owns this game object.</value>
-    public Scene OwningScene { get; }
+    public Scene OwningScene
+    {
+        get
+        {
+            AssertNonDisposed();
+            return _owningScene;
+        }
+    };
 
     /// <summary>
     ///     Gets a read-only view of the tags this game object has.
     /// </summary>
     /// <value>A read-only view of the tags.</value>
-    public IReadOnlyList<string> Tags => _tags.AsReadOnly();
+    public IReadOnlyList<string> Tags
+    {
+        get
+        {
+            AssertNonDisposed();
+            return _tags.AsReadOnly();
+        }
+    }
 
     /// <summary>
     ///     Gets the transform component attached to this game object.
