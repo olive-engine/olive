@@ -68,7 +68,7 @@ public abstract class Scene
             yield return current;
 
             IReadOnlyList<Transform> children = current.Transform.Children;
-            for (var childIndex = 0; childIndex < children.Count; childIndex++)
+            for (int childIndex = children.Count - 1; childIndex >= 0; childIndex--)
             {
                 stack.Push(children[childIndex].GameObject);
             }
