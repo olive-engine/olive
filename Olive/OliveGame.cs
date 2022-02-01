@@ -32,12 +32,7 @@ internal sealed class OliveGame : Game
 
     protected override void Initialize()
     {
-        GraphicsDeviceManager.PreferredBackBufferWidth = _resolution.Width;
-        GraphicsDeviceManager.PreferredBackBufferHeight = _resolution.Height;
-        GraphicsDeviceManager.IsFullScreen = _displayMode is DisplayMode.Fullscreen or DisplayMode.FullscreenBorderless;
-        GraphicsDeviceManager.HardwareModeSwitch = _displayMode is not DisplayMode.FullscreenBorderless;
-
-        GraphicsDeviceManager.ApplyChanges();
+        Screen.SetResolution(_resolution, _displayMode);
 
         var state = new DepthStencilState();
         state.DepthBufferEnable = true;
