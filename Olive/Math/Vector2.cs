@@ -31,7 +31,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     ///     A vector whose 2 elements are equal to one.
     /// </summary>
     /// <value>A vector whose two elements are equal to one (that is, the vector <c>(1, 1)</c>).</value>
-    public static readonly Vector2 One = new(0);
+    public static readonly Vector2 One = new(1);
 
     /// <summary>
     ///     The vector <c>(1, 0)</c>.

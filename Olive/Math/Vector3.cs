@@ -42,7 +42,7 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     ///     A vector whose 3 elements are equal to one.
     /// </summary>
     /// <value>A vector whose three elements are equal to one (that is, the vector <c>(1, 1, 1)</c>).</value>
-    public static readonly Vector3 One = new(0);
+    public static readonly Vector3 One = new(1);
 
     /// <summary>
     ///     The vector <c>(1, 0, 0)</c>.
