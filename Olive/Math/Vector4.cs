@@ -1,85 +1,87 @@
-﻿using System.Drawing;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 
 namespace Olive.Math;
 
 /// <summary>
-///     Represents a vector with two single-precision floating-point values.
+///     Represents a vector with four single-precision floating-point values.
 /// </summary>
 /// <remarks>
 ///     <para>
-///         This structure is designed to closely resemble the APIs of the built in .NET Vector2 structure, with inspiration
+///         This structure is designed to closely resemble the APIs of the built in .NET Vector4 structure, with inspiration
 ///         from MonoGame and Unity. 
 ///     </para>
 /// </remarks>
-public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
+public readonly struct Vector4 : IEquatable<Vector4>, IFormattable
 {
     /// <summary>
-    ///     The vector <c>(0, -1)</c>.
+    ///     A vector whose 4 elements are equal to one.
     /// </summary>
-    /// <value>The vector <c>(0, -1)</c>.</value>
-    public static readonly Vector2 Down = new(0, -1);
+    /// <value>A vector whose four elements are equal to one (that is, the vector <c>(1, 1, 1, 1)</c>).</value>
+    public static readonly Vector4 One = new(1);
 
     /// <summary>
-    ///     The vector <c>(-1, 0)</c>.
+    ///     The vector <c>(0, 0, 0, 1)</c>.
     /// </summary>
-    /// <value>The vector <c>(-1, 0)</c>.</value>
-    public static readonly Vector2 Left = new(-1, 0);
+    /// <value>The vector <c>(0, 0, 0, 1)</c>.</value>
+    public static readonly Vector4 UnitW = new(0, 0, 0, 1);
 
     /// <summary>
-    ///     A vector whose 2 elements are equal to one.
+    ///     The vector <c>(1, 0, 0, 0)</c>.
     /// </summary>
-    /// <value>A vector whose two elements are equal to one (that is, the vector <c>(1, 1)</c>).</value>
-    public static readonly Vector2 One = new(1);
+    /// <value>The vector <c>(1, 0, 0, 0)</c>.</value>
+    public static readonly Vector4 UnitX = new(1, 0, 0, 0);
 
     /// <summary>
-    ///     The vector <c>(1, 0)</c>.
+    ///     The vector <c>(0, 1, 0, 0)</c>.
     /// </summary>
-    /// <value>The vector <c>(1, 0)</c>.</value>
-    public static readonly Vector2 Right = new(1, 0);
+    /// <value>The vector <c>(0, 1, 0, 0)</c>.</value>
+    public static readonly Vector4 UnitY = new(0, 1, 0, 0);
 
     /// <summary>
-    ///     The vector <c>(1, 0, 0)</c>.
+    ///     The vector <c>(0, 0, 1, 0)</c>.
     /// </summary>
-    /// <value>The vector <c>(1, 0, 0)</c>.</value>
-    public static readonly Vector2 UnitX = new(1, 0);
+    /// <value>The vector <c>(0, 0, 1, 0)</c>.</value>
+    public static readonly Vector4 UnitZ = new(0, 0, 1, 0);
 
     /// <summary>
-    ///     The vector <c>(0, 1)</c>.
+    ///     A vector whose 4 elements are equal to zero.
     /// </summary>
-    /// <value>The vector <c>(0, 1)</c>.</value>
-    public static readonly Vector2 UnitY = new(0, 1);
+    /// <value>A vector whose four elements are equal to zero (that is, the vector <c>(0, 0, 0, 0)</c>).</value>
+    public static readonly Vector4 Zero = new(0);
 
     /// <summary>
-    ///     The vector <c>(0, 1)</c>.
+    ///     Initializes a new instance of the <see cref="Vector4" /> structure whose four elements have the same value.
     /// </summary>
-    /// <value>The vector <c>(0, 1)</c>.</value>
-    public static readonly Vector2 Up = new(0, 1);
-
-    /// <summary>
-    ///     A vector whose 2 elements are equal to zero.
-    /// </summary>
-    /// <value>A vector whose two elements are equal to zero (that is, the vector <c>(0, 0, 0)</c>).</value>
-    public static readonly Vector2 Zero = new(0);
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="Vector2" /> structure whose two elements have the same value.
-    /// </summary>
-    /// <param name="value">The value to assign to all two elements.</param>
-    public Vector2(float value) : this(value, value)
+    /// <param name="value">The value to assign to all four elements.</param>
+    public Vector4(float value) : this(value, value, value, value)
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Vector2" /> structure whose elements have the specified values.
+    ///     Initializes a new instance of the <see cref="Vector4" /> structure whose elements have the specified values.
     /// </summary>
     /// <param name="x">The value to assign to <see cref="X" />.</param>
     /// <param name="y">The value to assign to <see cref="Y" />.</param>
-    public Vector2(float x, float y)
+    /// <param name="z">The value to assign to <see cref="Z" />.</param>
+    /// <param name="w">The value to assign to <see cref="W" />.</param>
+    public Vector4(float x, float y, float z, float w)
     {
         X = x;
         Y = y;
+        Z = z;
+        W = w;
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Vector4" /> structure by copying the <see cref="Vector3.X" />,
+    ///     <see cref="Vector3.Y" /> and <see cref="Vector3.Z" /> of a <see cref="Vector3" /> to their respective component
+    ///     values, and assigning <see cref="W" /> a specified value.
+    /// </summary>
+    /// <param name="vector">The three-dimensional vector to copy.</param>
+    /// <param name="w">The value to assign to <see cref="W" />.</param>
+    public Vector4(in Vector3 vector, float w) : this(vector.X, vector.Y, vector.Z, w)
+    {
     }
 
     /// <summary>
@@ -103,6 +105,12 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     public float LengthSquared => DistanceSquared(this, Zero);
 
     /// <summary>
+    ///     Gets or initializes the value of the W component.
+    /// </summary>
+    /// <value>The W component.</value>
+    public float W { get; init; }
+
+    /// <summary>
     ///     Gets or initializes the value of the X component.
     /// </summary>
     /// <value>The X component.</value>
@@ -115,15 +123,25 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     public float Y { get; init; }
 
     /// <summary>
+    ///     Gets or initializes the value of the Z component.
+    /// </summary>
+    /// <value>The Z component.</value>
+    public float Z { get; init; }
+
+    /// <summary>
     ///     Gets the component value by a specified index.
     /// </summary>
     /// <param name="index">
     ///     <para><c>0</c> to retrieve the <see cref="X" /> component.</para>
     ///     -or-
     ///     <para><c>1</c> to retrieve the <see cref="Y" /> component.</para>
+    ///     -or-
+    ///     <para><c>2</c> to retrieve the <see cref="Z" /> component.</para>
+    ///     -or-
+    ///     <para><c>3</c> to retrieve the <see cref="W" /> component.</para>
     /// </param>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     <paramref name="index" /> is less than 0 or greater than 1.
+    ///     <paramref name="index" /> is less than 0 or greater than 3.
     /// </exception>
     public float this[int index]
     {
@@ -133,6 +151,8 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
             {
                 0 => X,
                 1 => Y,
+                2 => Z,
+                3 => W,
                 _ => throw new ArgumentOutOfRangeException(nameof(index))
             };
         }
@@ -146,6 +166,12 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
                 case 1:
                     Y = value;
                     break;
+                case 2:
+                    Z = value;
+                    break;
+                case 3:
+                    W = value;
+                    break;
                 default: throw new ArgumentOutOfRangeException(nameof(index));
             }
         }
@@ -157,11 +183,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The summed vector.</returns>
-    public static Vector2 operator +(in Vector2 left, in Vector2 right)
+    public static Vector4 operator +(in Vector4 left, in Vector4 right)
     {
-        return new Vector2(
+        return new Vector4(
             left.X + right.X,
-            left.Y + right.Y
+            left.Y + right.Y,
+            left.Z + right.Z,
+            left.W + right.W
         );
     }
 
@@ -171,11 +199,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The difference vector.</returns>
-    public static Vector2 operator -(in Vector2 left, in Vector2 right)
+    public static Vector4 operator -(in Vector4 left, in Vector4 right)
     {
-        return new Vector2(
+        return new Vector4(
             left.X - right.X,
-            left.Y - right.Y
+            left.Y - right.Y,
+            left.Z - right.Z,
+            left.W - right.W
         );
     }
 
@@ -185,11 +215,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The product vector.</returns>
-    public static Vector2 operator *(in Vector2 left, in Vector2 right)
+    public static Vector4 operator *(in Vector4 left, in Vector4 right)
     {
-        return new Vector2(
+        return new Vector4(
             left.X * right.X,
-            left.Y * right.Y
+            left.Y * right.Y,
+            left.Z * right.Z,
+            left.W * right.W
         );
     }
 
@@ -199,11 +231,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The vector value.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector2 operator *(in Vector2 left, float right)
+    public static Vector4 operator *(in Vector4 left, float right)
     {
-        return new Vector2(
+        return new Vector4(
             left.X * right,
-            left.Y * right
+            left.Y * right,
+            left.Z * right,
+            left.W * right
         );
     }
 
@@ -213,11 +247,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The scalar value.</param>
     /// <param name="right">The vector value.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector2 operator *(float left, in Vector2 right)
+    public static Vector4 operator *(float left, in Vector4 right)
     {
-        return new Vector2(
+        return new Vector4(
             left * right.X,
-            left * right.Y
+            left * right.Y,
+            left * right.Z,
+            left * right.W
         );
     }
 
@@ -227,11 +263,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector2 operator /(in Vector2 left, in Vector2 right)
+    public static Vector4 operator /(in Vector4 left, in Vector4 right)
     {
-        return new Vector2(
+        return new Vector4(
             left.X / right.X,
-            left.Y / right.Y
+            left.Y / right.Y,
+            left.Z / right.Z,
+            left.W / right.W
         );
     }
 
@@ -241,11 +279,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The vector value.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector2 operator /(in Vector2 left, float right)
+    public static Vector4 operator /(in Vector4 left, float right)
     {
-        return new Vector2(
+        return new Vector4(
             left.X / right,
-            left.Y / right
+            left.Y / right,
+            left.Z / right,
+            left.W / right
         );
     }
 
@@ -255,11 +295,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The scalar value.</param>
     /// <param name="right">The vector value.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector2 operator /(float left, in Vector2 right)
+    public static Vector4 operator /(float left, in Vector4 right)
     {
-        return new Vector2(
+        return new Vector4(
             left / right.X,
-            left / right.Y
+            left / right.Y,
+            left / right.Z,
+            left / right.W
         );
     }
 
@@ -268,7 +310,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The negated vector.</returns>
-    public static Vector2 operator -(in Vector2 value)
+    public static Vector4 operator -(in Vector4 value)
     {
         return Zero - value;
     }
@@ -279,7 +321,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if the two vectors are equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(in Vector2 left, in Vector2 right)
+    public static bool operator ==(in Vector4 left, in Vector4 right)
     {
         return left.Equals(right);
     }
@@ -290,101 +332,61 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if the two vectors are not equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator !=(in Vector2 left, in Vector2 right)
+    public static bool operator !=(in Vector4 left, in Vector4 right)
     {
         return !left.Equals(right);
     }
 
     /// <summary>
-    ///     Explicitly converts a <see cref="Vector3" /> to a <see cref="Vector2" />, by assigning <see cref="X" /> and
-    ///     <see cref="Y" /> to their corresponding component values in <paramref name="value" /> and ignoring
-    ///     <see cref="Vector3.Z" />.
+    ///     Explicitly converts a <see cref="Vector3" /> to a <see cref="Vector4" />, by assigning <see cref="X" />,
+    ///     <see cref="Y" /> and <see cref="Z"/> to their corresponding component values in <paramref name="value" /> and
+    ///     assigning 0 to <see cref="W" />.
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static explicit operator Vector2(in Vector3 value)
+    public static implicit operator Vector4(in Vector3 value)
     {
-        return new Vector2(value.X, value.Y);
+        return new Vector4(value.X, value.Y, value.Z, 0);
     }
 
     /// <summary>
-    ///     Implicitly converts from <see cref="Vector2" /> to <see cref="Microsoft.Xna.Framework.Vector2" />.
+    ///     Implicitly converts from <see cref="Vector4" /> to <see cref="Microsoft.Xna.Framework.Vector4" />.
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Microsoft.Xna.Framework.Vector2(in Vector2 value)
+    public static implicit operator Microsoft.Xna.Framework.Vector4(in Vector4 value)
     {
-        return new Microsoft.Xna.Framework.Vector2(value.X, value.Y);
+        return new Microsoft.Xna.Framework.Vector4(value.X, value.Y, value.Z, value.W);
     }
 
     /// <summary>
-    ///     Implicitly converts from <see cref="Microsoft.Xna.Framework.Vector2" /> to <see cref="Vector2" />.
+    ///     Implicitly converts from <see cref="Microsoft.Xna.Framework.Vector4" /> to <see cref="Vector4" />.
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Vector2(in Microsoft.Xna.Framework.Vector2 value)
+    public static implicit operator Vector4(in Microsoft.Xna.Framework.Vector4 value)
     {
-        return new Vector2(value.X, value.Y);
+        return new Vector4(value.X, value.Y, value.Z, value.W);
     }
 
     /// <summary>
-    ///     Implicitly converts from <see cref="Vector2" /> to <see cref="System.Numerics.Vector2" />.
+    ///     Implicitly converts from <see cref="Vector4" /> to <see cref="System.Numerics.Vector4" />.
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator System.Numerics.Vector2(in Vector2 value)
+    public static implicit operator System.Numerics.Vector4(in Vector4 value)
     {
-        return new System.Numerics.Vector2(value.X, value.Y);
+        return new System.Numerics.Vector4(value.X, value.Y, value.Z, value.W);
     }
 
     /// <summary>
-    ///     Implicitly converts from <see cref="System.Numerics.Vector2" /> to <see cref="Vector2" />.
+    ///     Implicitly converts from <see cref="System.Numerics.Vector4" /> to <see cref="Vector4" />.
     /// </summary>
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Vector2(in System.Numerics.Vector2 value)
+    public static implicit operator Vector4(in System.Numerics.Vector4 value)
     {
-        return new Vector2(value.X, value.Y);
-    }
-
-    /// <summary>
-    ///     Implicitly converts from <see cref="Vector2" /> to <see cref="Size" />.
-    /// </summary>
-    /// <param name="value">The vector to convert.</param>
-    /// <returns>The converted result, as a <see cref="Size" />.</returns>
-    public static explicit operator Size(in Vector2 value)
-    {
-        return new Size((int) value.X, (int) value.Y);
-    }
-
-    /// <summary>
-    ///     Implicitly converts from <see cref="Size" /> to <see cref="Vector2" />.
-    /// </summary>
-    /// <param name="value">The size to convert.</param>
-    /// <returns>The converted result, as a <see cref="Vector2" />.</returns>
-    public static implicit operator Vector2(in Size value)
-    {
-        return new Vector2(value.Width, value.Height);
-    }
-
-    /// <summary>
-    ///     Implicitly converts from <see cref="Vector2" /> to <see cref="SizeF" />.
-    /// </summary>
-    /// <param name="value">The vector to convert.</param>
-    /// <returns>The converted result, as a <see cref="SizeF" />.</returns>
-    public static implicit operator SizeF(in Vector2 value)
-    {
-        return new SizeF(value.X, value.Y);
-    }
-
-    /// <summary>
-    ///     Implicitly converts from <see cref="SizeF" /> to <see cref="Vector2" />.
-    /// </summary>
-    /// <param name="value">The size to convert.</param>
-    /// <returns>The converted result, as a <see cref="Vector2" />.</returns>
-    public static implicit operator Vector2(in SizeF value)
-    {
-        return new Vector2(value.Width, value.Height);
+        return new Vector4(value.X, value.Y, value.Z, value.W);
     }
 
     /// <summary>
@@ -392,11 +394,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The absolute value vector.</returns>
-    public static Vector2 Abs(in Vector2 value)
+    public static Vector4 Abs(in Vector4 value)
     {
-        return new Vector2(
+        return new Vector4(
             MathF.Abs(value.X),
-            MathF.Abs(value.Y)
+            MathF.Abs(value.Y),
+            MathF.Abs(value.Z),
+            MathF.Abs(value.W)
         );
     }
 
@@ -407,7 +411,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="min">The minimum vector</param>
     /// <param name="max">The maximum vector</param>
     /// <returns>The restricted vector.</returns>
-    public static Vector2 Clamp(in Vector2 value, in Vector2 min, in Vector2 max)
+    public static Vector4 Clamp(in Vector4 value, in Vector4 min, in Vector4 max)
     {
         return Min(Max(value, min), max);
     }
@@ -418,9 +422,9 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first point.</param>
     /// <param name="right">The second point.</param>
     /// <returns>The distance.</returns>
-    public static float Distance(in Vector2 left, in Vector2 right)
+    public static float Distance(in Vector4 left, in Vector4 right)
     {
-        Vector2 difference = left - right;
+        Vector4 difference = left - right;
         float dot = Dot(difference, difference);
         return MathF.Sqrt(dot);
     }
@@ -431,9 +435,9 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first point.</param>
     /// <param name="right">The second point.</param>
     /// <returns>The distance squared.</returns>
-    public static float DistanceSquared(in Vector2 left, in Vector2 right)
+    public static float DistanceSquared(in Vector4 left, in Vector4 right)
     {
-        Vector2 difference = left - right;
+        Vector4 difference = left - right;
         return Dot(difference, difference);
     }
 
@@ -443,10 +447,12 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The dot product.</returns>
-    public static float Dot(in Vector2 left, in Vector2 right)
+    public static float Dot(in Vector4 left, in Vector4 right)
     {
         return left.X * right.X +
-               left.Y * right.Y;
+               left.Y * right.Y +
+               left.Z * right.Z +
+               left.W * right.W;
     }
 
     /// <summary>
@@ -457,10 +463,10 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="right">The second vector.</param>
     /// <param name="alpha">The relative weight of <paramref name="right" /> in the interpolation.</param>
     /// <returns>The interpolated vector.</returns>
-    public static Vector2 Lerp(in Vector2 left, in Vector2 right, float alpha)
+    public static Vector4 Lerp(in Vector4 left, in Vector4 right, float alpha)
     {
-        Vector2 firstInfluence = left * (1.0f - alpha);
-        Vector2 secondInfluence = right * alpha;
+        Vector4 firstInfluence = left * (1.0f - alpha);
+        Vector4 secondInfluence = right * alpha;
         return firstInfluence + secondInfluence;
     }
 
@@ -470,11 +476,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The maximized vector.</returns>
-    public static Vector2 Max(in Vector2 left, in Vector2 right)
+    public static Vector4 Max(in Vector4 left, in Vector4 right)
     {
-        return new Vector2(
+        return new Vector4(
             MathF.Max(left.X, right.X),
-            MathF.Max(left.Y, right.Y)
+            MathF.Max(left.Y, right.Y),
+            MathF.Max(left.Z, right.Z),
+            MathF.Max(left.W, right.W)
         );
     }
 
@@ -484,11 +492,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The minimized vector.</returns>
-    public static Vector2 Min(in Vector2 left, in Vector2 right)
+    public static Vector4 Min(in Vector4 left, in Vector4 right)
     {
-        return new Vector2(
+        return new Vector4(
             MathF.Min(left.X, right.X),
-            MathF.Min(left.Y, right.Y)
+            MathF.Min(left.Y, right.Y),
+            MathF.Min(left.Z, right.Z),
+            MathF.Min(left.W, right.W)
         );
     }
 
@@ -497,22 +507,9 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The vector to normalize.</param>
     /// <returns>The normalized vector.</returns>
-    public static Vector2 Normalize(in Vector2 value)
+    public static Vector4 Normalize(in Vector4 value)
     {
         return value / value.Length;
-    }
-
-    /// <summary>
-    ///     Returns the reflection of a vector off a surface that has the specified normal.
-    /// </summary>
-    /// <param name="vector">The source vector.</param>
-    /// <param name="normal">The normal of the surface off of which the vector is being reflected.</param>
-    /// <returns>The reflected vector.</returns>
-    public static Vector2 Reflect(in Vector2 vector, in Vector2 normal)
-    {
-        float dot = Dot(vector, normal);
-        Vector2 temp = normal * dot * 2.0f;
-        return vector - temp;
     }
 
     /// <summary>
@@ -520,11 +517,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The square root vector.</returns>
-    public static Vector2 SquareRoot(in Vector2 value)
+    public static Vector4 SquareRoot(in Vector4 value)
     {
         return new(
             MathF.Sqrt(value.X),
-            MathF.Sqrt(value.Y)
+            MathF.Sqrt(value.Y),
+            MathF.Sqrt(value.Z),
+            MathF.Sqrt(value.W)
         );
     }
 
@@ -548,11 +547,13 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
         if (index < 0 || index >= array.Length)
             throw new ArgumentOutOfRangeException(nameof(index), "Specified index was out of the bounds of the array.");
 
-        if (array.Length - index < 2)
+        if (array.Length - index < 4)
             throw new ArgumentException("The number of elements in source vector is greater than the destination array.");
 
         array[index] = X;
         array[index + 1] = Y;
+        array[index + 2] = Z;
+        array[index + 3] = W;
     }
 
     /// <summary>
@@ -560,10 +561,14 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="x">When this method returns, contains the value of the X component.</param>
     /// <param name="y">When this method returns, contains the value of the Y component.</param>
-    public void Deconstruct(out float x, out float y)
+    /// <param name="z">When this method returns, contains the value of the Z component.</param>
+    /// <param name="w">When this method returns, contains the value of the W component.</param>
+    public void Deconstruct(out float x, out float y, out float z, out float w)
     {
         x = X;
         y = Y;
+        z = Z;
+        w = W;
     }
 
     /// <summary>
@@ -571,26 +576,28 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     /// </summary>
     /// <param name="other">The vector to compare with this instance.</param>
     /// <returns><see langword="true" /> if the two vectors are equal; otherwise, <see langword="false" />.</returns>
-    public bool Equals(Vector2 other)
+    public bool Equals(Vector4 other)
     {
         return MathUtils.Approximately(X, other.X) &&
-               MathUtils.Approximately(Y, other.Y);
+               MathUtils.Approximately(Y, other.Y) &&
+               MathUtils.Approximately(Z, other.Z) &&
+               MathUtils.Approximately(W, other.W);
     }
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        return obj is Vector2 other && Equals(other);
+        return obj is Vector4 other && Equals(other);
     }
 
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        return HashCode.Combine(X, Y);
+        return HashCode.Combine(X, Y, Z, W);
     }
 
     /// <summary>
-    ///     Returns a <see cref="string" /> representing this <see cref="Vector2" /> instance.
+    ///     Returns a <see cref="string" /> representing this <see cref="Vector4" /> instance.
     /// </summary>
     /// <returns>The string representation.</returns>
     public override string ToString()
@@ -599,7 +606,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     }
 
     /// <summary>
-    ///     Returns a <see cref="string" /> representing this <see cref="Vector2" /> instance, using the specified format to
+    ///     Returns a <see cref="string" /> representing this <see cref="Vector4" /> instance, using the specified format to
     ///     format individual elements.
     /// </summary>
     /// <param name="format">The format of individual elements.</param>
@@ -610,7 +617,7 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
     }
 
     /// <summary>
-    ///     Returns a <see cref="string" /> representing this <see cref="Vector2" /> instance, using the specified format to
+    ///     Returns a <see cref="string" /> representing this <see cref="Vector4" /> instance, using the specified format to
     ///     format individual elements and the given <see cref="IFormatProvider" />.
     /// </summary>
     /// <param name="format">The format of individual elements.</param>
@@ -625,6 +632,12 @@ public readonly struct Vector2 : IEquatable<Vector2>, IFormattable
         builder.Append(separator);
         builder.Append(' ');
         builder.Append(Y.ToString(format, formatProvider));
+        builder.Append(separator);
+        builder.Append(' ');
+        builder.Append(Z.ToString(format, formatProvider));
+        builder.Append(separator);
+        builder.Append(' ');
+        builder.Append(W.ToString(format, formatProvider));
         builder.Append('>');
         return builder.ToString();
     }

@@ -620,9 +620,9 @@ public readonly struct Vector3 : IEquatable<Vector3>, IFormattable
     /// <summary>
     ///     Deconstructs this vector.
     /// </summary>
-    /// <param name="x">The X component value.</param>
-    /// <param name="y">The Y component value.</param>
-    /// <param name="z">The Z component value.</param>
+    /// <param name="x">When this method returns, contains the value of the X component.</param>
+    /// <param name="y">When this method returns, contains the value of the Y component.</param>
+    /// <param name="z">When this method returns, contains the value of the Z component.</param>
     public void Deconstruct(out float x, out float y, out float z)
     {
         x = X;
